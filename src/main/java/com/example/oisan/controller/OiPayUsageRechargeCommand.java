@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class OiPayUsageRechargeCommand {
 
-	private int userId;
+	private int customerId;
 	private int oiPayId;
 
 	private int type;
@@ -15,11 +15,11 @@ public class OiPayUsageRechargeCommand {
 	private int auctionId;
 	private Date createAt;
 	
-	public int getUserId() {
-		return userId;
+	public int getCustomerId() {
+		return customerId;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 	public int getOiPayId() {
 		return oiPayId;
@@ -59,7 +59,7 @@ public class OiPayUsageRechargeCommand {
 	}
 	@Override
 	public String toString() {
-		return "OiPayUsageChargeRequest [userId=" + userId + ", oiPayId=" + oiPayId + ", type=" + type + ", amount="
+		return "OiPayUsageChargeRequest [customerId=" + customerId + ", oiPayId=" + oiPayId + ", type=" + type + ", amount="
 				+ amount + ", remain=" + remain + ", auctionId=" + auctionId + ", createAt=" + createAt + "]";
 	}
 	
