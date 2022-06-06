@@ -2,12 +2,14 @@ package com.example.oisan.dao;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+
 import com.example.oisan.domain.OiPayUsage;
 
 public interface OiPayUsageDao {
-	List<OiPayUsage> getOiPayUsageByUserId(int userId);
+	List<OiPayUsage> getOiPayUsageByCustomerId(int customerId) throws DataAccessException;
 	
-	OiPayUsage getOiPayUsage(int oiPayId);
+	OiPayUsage getOiPayUsageById(int oiPayId) throws DataAccessException;
 	
-	void insertOiPayUsage(OiPayUsage usage);
+	void insertOiPayUsage(OiPayUsage usage) throws DataAccessException;
 }

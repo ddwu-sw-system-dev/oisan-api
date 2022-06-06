@@ -22,24 +22,14 @@ public class OiPayUsageController {
 	public void setOiPayUsageService(OiPayUsageService oiPayUsageService) {
 		this.oiPayUsageService = oiPayUsageService;
 	}
+
 	
-//	@RequestMapping("/oipay/{userId}")
-//	public String oipayDetail(@PathVariable int userId, Model model) {
-//		List<OiPayUsage> myUsage = (List<OiPayUsage>) oiPayUsageService.findUserOiPay(userId);
-//
-//		if (myUsage == null) {
-//			return "oipay/notFound";
-//		} 
-//		model.addAttribute("myUsage", myUsage);
-//		return "oipay/myUsage" ;
-//	}
-	
-	@RequestMapping("/oipay/{userId}")
-	
+	@RequestMapping("/oipay/{customerId}")
 	@ResponseBody
-	public List<OiPayUsage> oipayDetail(@PathVariable int userId) {
-		System.out.print(userId);
-		List<OiPayUsage> myUsage = (List<OiPayUsage>) oiPayUsageService.findUserOiPay(userId);
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	public List<OiPayUsage> oipayDetail(@PathVariable int customerId) {
+		System.out.print("Request OiPay History : customerId = " + customerId);
+		List<OiPayUsage> myUsage = (List<OiPayUsage>) oiPayUsageService.findUserOiPay(customerId);
 
 		return myUsage;
 	}
