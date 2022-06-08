@@ -6,75 +6,70 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.oisan.domain.OiPayUsage;
+import com.example.oisan.repository.OiPayUsageRepository;
 
 @Service
 public class OiPayUsageService {
 
-	private Map<Integer, OiPayUsage> oiPayMap = new HashMap<Integer, OiPayUsage>();
-	private int oiPayIdSeq = 0;
-	
-	public OiPayUsageService() {
-		Date date = new Date();
-		oiPayMap.put(oiPayIdSeq++, new OiPayUsage(1, oiPayIdSeq, 0, 1000, 0, 0, date));
-		oiPayMap.put(oiPayIdSeq++, new OiPayUsage(1, oiPayIdSeq, 0, 2000, 0, 0, date));
-		oiPayMap.put(oiPayIdSeq, new OiPayUsage(1, oiPayIdSeq, 1, 1500, 0, 0, date));
-		oiPayIdSeq++;
+	@Autowired
+	private OiPayUsageRepository oiPayUsageRepository;
+	public void setOiPayUsageRepository(OiPayUsageRepository oiPayUsageRepository) {
+		this.oiPayUsageRepository = oiPayUsageRepository;
 	}
-	
-	public void createOiPay(OiPayUsage oiPay) {
-		oiPay.setCreateAt(new Date());
-		oiPay.setRemain(0);
-		oiPayMap.put(1, oiPay);
-	}
-	
-	public List<OiPayUsage> getOiPayUsage() {
-		return new ArrayList<OiPayUsage>(oiPayMap.values());
-	}
-	
-	public List<OiPayUsage> findUserOiPay(int userId) {
-		List<OiPayUsage> myUsage = new ArrayList<OiPayUsage>();
-		
-		for (OiPayUsage oiPay : oiPayMap.values()) {
-			if (oiPay.getCustomerId() == userId) { 
-				//이 로직으로 어떻게 마지막 걸 가져오지여?
-				myUsage.add(oiPay);
-			}
-		}
-		return myUsage;
-	}
-	
-	public void deleteOiPay(int oiPayId) {
-		oiPayMap.remove(oiPayId);
-	}
-	
-	public void chargeOiPay(int userId, int amount) {
-//		OiPayUsage oiPay = findUserOiPay(userId);
-//		int remain = oiPay.getRemain();
-		int remain = 0;
-		Date date = new Date();
-		
-//		oiPay.setType(0);
-//
-//		oiPay.setAmount(amount);
-//		oiPay.setRemain(remain + oiPay.getAmount());
-		// user의 remain? 도 바꿔야되는데
-		oiPayMap.put(oiPayIdSeq, new OiPayUsage(userId, oiPayIdSeq, 0, amount, remain, 0, date));
-		oiPayIdSeq++;
-	}
-	
-	public void useOiPay(int userId, int amount) {
-//		OiPayUsage oiPay = findUserOiPay(userId);
-		Date date = new Date();
-//		int remain = oiPay.getRemain();
-//		if (amount > remain) //잔액보다 사용하고자하는 양이 크면 안됨!
-//			throw exception;¨
-//		oiPay.setType(1);
 
-//		oiPay.setAmount(amount);
-//		oiPay.setRemain(remain - oiPay.getAmount());
-		oiPayMap.put(oiPayIdSeq, new OiPayUsage(4, oiPayIdSeq, 1, amount, 0, 0, date));
-		oiPayIdSeq++;
+	
+	public OiPayUsageService() {}
+	
+	public List<OiPayUsage> findUserOiPay(int customerId) {
+		// 마지막 사용내역이 가장 위로 오도록 내림차순 정렬
+		return oiPayUsageRepository.findByCustomerIdOrderByOiPayIdDesc(customerId);
 	}
+	
+	public OiPayUsage chargeOiPay(int customerId, int amount) {
+		System.out.println("charge Id =" + customerId);
+		Date date = new Date();
+		int remain = 0;
+		
+		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
+
+		if (lastUsage != null) { // 마지막 사용내역이 있다면
+			remain = lastUsage.getRemain();
+		}
+		remain  = remain + amount;
+		
+		// OiPayUsage(int customerId, int oiPayId, int type, int amount, int remain, int auctionId, Date createAt);
+		// OiPayUsage(int customerId, int type, int amount, int remain, Integer auctionId, Date createAt)
+		OiPayUsage current = new OiPayUsage(customerId, 0, amount, remain, 0, date); //auction_id 수정
+		
+		
+		return oiPayUsageRepository.save(current);
+	}
+	
+	public OiPayUsage useOiPay(int customerId, int amount) {
+		Date date = new Date();
+		int remain = 0;
+		
+		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
+
+		if (lastUsage != null) { // 마지막 사용내역이 있다면
+			remain = lastUsage.getRemain();
+		}
+		
+		if (amount > remain) {
+			//잔액보다 사용하고자 하는 양이 크면 예외 처리해야됨
+			return null;
+		}
+		
+		remain  = remain - amount;
+		
+		OiPayUsage current = new OiPayUsage(customerId, 1, amount, remain, 0, date);//auction_id 수정
+		
+		return oiPayUsageRepository.save(current);
+	}
+	
+	//TODO: auction과 연동하는 부분 추가
+	//TODO: user의 oipay remain 바꿔주기 -> 트랜잭션 처리
 }
