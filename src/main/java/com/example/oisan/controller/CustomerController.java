@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.service.CustomerService;
 import com.example.oisan.command.CustomerUpdateCommand;
+import com.example.oisan.command.LoginCommand;
 
 @RestController
 @RequestMapping("/customers")
@@ -46,6 +47,11 @@ public class CustomerController {
 	public Customer getCustomerById(@PathVariable String customerId) {
 		int id = Integer.parseInt(customerId);
 		return customerService.getCustomerInfoByCustomerId(id); //test obj
+	}
+	
+	@PostMapping("/login")
+	public Customer loginCustomer(LoginCommand loginCustomer) {
+		return customerService.loginCustomer(loginCustomer);
 	}
 	
 	@GetMapping

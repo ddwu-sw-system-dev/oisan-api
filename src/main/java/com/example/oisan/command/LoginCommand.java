@@ -5,7 +5,7 @@ public class LoginCommand {
 
 	private String email;
 	private String pw;
-	private int customerCustomerId;
+	private int customerId;
 
 	public String getEmail() {
 		return email;
@@ -24,11 +24,11 @@ public class LoginCommand {
 	}
 
 	public int getCustomerId() {
-		return customerCustomerId;
+		return customerId;
 	}
 
-	public void setCustomerId(int customerCustomerId) {
-		this.customerCustomerId = customerCustomerId;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 	
 
