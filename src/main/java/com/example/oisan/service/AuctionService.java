@@ -62,7 +62,7 @@ public class AuctionService {
 		return auctionRepository.findCategoryName(categId);
 	}
 	
-	public List<Auction> getWinningAuctionListByUserId(int customerId) {
+	public List<Auction> getWinningAuctionListByCustomerId(int customerId) {
 		return auctionRepository.findByCustomerIdAndStatus(customerId, 1);
 	}
 	
