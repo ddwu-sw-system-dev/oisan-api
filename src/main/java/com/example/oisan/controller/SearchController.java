@@ -20,21 +20,23 @@ public class SearchController {
 
 	@Autowired
 	private PostService postService;
+
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}
 	
 	@Autowired
 	private AuctionService auctionService;
+
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
 	}
 	
 	@GetMapping("/post/{search_word}")
-	public ArrayList<Post> searchPost(@PathVariable String word){
-		return postService.findPostByTitleDescWriter(word);
+	public List<Post> searchPost(@PathVariable String search_word){
+		return postService.findPostByTitle(search_word);
 	}
-	
+
 	@GetMapping("/auction/{search_word}")
 	public List<Auction> searchAuction(@PathVariable String search_word){
 		return auctionService.findAuctionByTitle(search_word);

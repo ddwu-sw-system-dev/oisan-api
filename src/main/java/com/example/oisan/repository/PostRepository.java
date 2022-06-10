@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    Optional<Post> findByTitle(String title);
+    List<Post> findByTitleContaining(String title);
 
 }
