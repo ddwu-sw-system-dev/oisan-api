@@ -1,10 +1,10 @@
 package com.example.oisan.controller;
 
+import com.example.oisan.domain.Auction;
+import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Post;
 import com.example.oisan.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,57 +23,59 @@ public class PostController {
     }
 
     @PostMapping("/post/new")
-    public Post create(@RequestBody PostForm form, HttpServletRequest request) {
-
-        // 현재 로그인한 유저와 비교해서 일치하면 진행
+    public Post createPost(@RequestBody PostCommand postCom, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");
 
-        //일치하는지 확인
-        if (!(customer.getCustomerId() == auction.getCustomerId())) {
-            return null;
-        }
-
-        Post post = postService.save(form, customer.getCustomerId());
+        Post post = postService.save(postCom, customer.getCustomerId());
         return post;
     }
 
     @GetMapping("/post/list")
-    public List<Post> list() {
+    public List<Post> getPostList() {
         List<Post> posts = postService.findPosts();
         return posts;
     }
 
     @GetMapping("/post")
-    public Post detail(@RequestParam("postId") int postId) {
+    public Post getPost(@RequestParam("postId") int postId) {
         Post post = postService.findPost(postId).get();
         return post;
     }
 
     @GetMapping("/post/edit")
-    public Post edit(@RequestParam("postId") int postId) {
+    public Post editPost(@RequestParam("postId") int postId, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("Customer");
+
         Post post = postService.findPost(postId).get();
+
+        if (!(customer.getCustomerId() == post.getCustomerId())) {
+            return null;
+        }
         return post;
     }
 
     @PutMapping("/post/edit")
-    public String update(@RequestBody PostForm form) {
-
-        // 현재 로그인한 유저와 비교해서 일치하면 진행
+    public String updatePost(@RequestBody PostCommand postCom, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");
 
-        //일치하는지 확인
-        if (!(customer.getCustomerId() == auction.getCustomerId())) {
-            return null;
-        }
-
-        postService.save(form, customer.getCustomerId());
+        postService.save(postCom, customer.getCustomerId());
         return "redirect:/";
     }
 
     @DeleteMapping("/post")
-    public String delete(@RequestParam("postId") int postId) {
+    public String deletePost(@RequestParam("postId") int postId, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("Customer");
+
+        Post post = postService.findPost(postId).get();
+
+        if (!(customer.getCustomerId() == post.getCustomerId())) {
+            return null;
+        }
+
         postService.deletePost(postId);
         return "redirect:/";
     }

@@ -1,10 +1,8 @@
 package com.example.oisan.controller;
 
-import javax.persistence.Column;
-import java.util.Date;
 import java.util.List;
 
-public class PostForm {
+public class PostCommand {
 
     private String title;
     private String desc;
