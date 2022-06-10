@@ -1,6 +1,7 @@
 package com.example.oisan.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,24 +20,26 @@ public class SearchController {
 
 	@Autowired
 	private PostService postService;
+
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}
 	
 	@Autowired
 	private AuctionService auctionService;
+
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
 	}
 	
-	@GetMapping("/post/{search_word}")
-	public ArrayList<Post> searchPost(@PathVariable String word){
-		return postService.findPostByTitleDescWriter(word);
+	@GetMapping("/post/{word}")
+	public List<Post> searchPost(@PathVariable String word){
+		return postService.findPostByTitle(word);
 	}
 	
-	@GetMapping("/auction/{search_word}")
-	public ArrayList<Auction> searchAuction(@PathVariable String word){
-		return auctionService.findAuctionByTitleDestWriter(word);
-	}
+//	@GetMapping("/auction/{search_word}")
+//	public ArrayList<Auction> searchAuction(@PathVariable String word){
+//		return auctionService.findAuctionByTitleDestWriter(word);
+//	}
 	
 }

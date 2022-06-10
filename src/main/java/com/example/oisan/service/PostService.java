@@ -42,4 +42,8 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    public List<Post> findPostByTitle(String title) {
+        return postRepository.findByTitleContaining(title);
+    }
+
 }

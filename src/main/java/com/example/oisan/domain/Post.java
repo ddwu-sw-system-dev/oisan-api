@@ -22,6 +22,8 @@ public class Post {
     private int depth;
     private int status;
 
+    public Post() {}
+
     public Post(int postId, int customerId, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
         this.postId = postId;
         this.customerId = customerId;
