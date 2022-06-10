@@ -33,7 +33,7 @@ public class BiddingService {
 	}
 	
 	public List<Bidding> getBiddingsByCustomerId(int customerId) {
-		return biddingRepository.findByCustomerIdDesc(customerId);
+		return biddingRepository.findByCustomerId(customerId);
 	}
 	
 	public Bidding insertBidding(BiddingCommand biddingCom, int customerId) {
