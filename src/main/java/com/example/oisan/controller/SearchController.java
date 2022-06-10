@@ -32,14 +32,14 @@ public class SearchController {
 		this.auctionService = auctionService;
 	}
 	
-	@GetMapping("/post/{word}")
-	public List<Post> searchPost(@PathVariable String word){
-		return postService.findPostByTitle(word);
+	@GetMapping("/post/{search_word}")
+	public List<Post> searchPost(@PathVariable String search_word){
+		return postService.findPostByTitle(search_word);
 	}
-	
-//	@GetMapping("/auction/{search_word}")
-//	public ArrayList<Auction> searchAuction(@PathVariable String word){
-//		return auctionService.findAuctionByTitleDestWriter(word);
-//	}
+
+	@GetMapping("/auction/{search_word}")
+	public List<Auction> searchAuction(@PathVariable String search_word){
+		return auctionService.findAuctionByTitle(search_word);
+	}
 	
 }
