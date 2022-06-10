@@ -32,4 +32,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 	@Query(value="UPDATE AUCTION SET STATUS = 0 WHERE CLOSING_TIME <= ?1", nativeQuery=true)
 	Auction closeAuction(Date curTime);
 	
+	List<Auction> findByTitleContaining(String word);
+	
 }

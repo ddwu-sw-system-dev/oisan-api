@@ -126,4 +126,8 @@ public class AuctionService {
 		auctionRepository.deleteById(auctionId);
 	}
 	
+	public List<Auction> findAuctionByTitle(String word) {
+		return auctionRepository.findByTitleContaining(word);
+	}
+	
 }
