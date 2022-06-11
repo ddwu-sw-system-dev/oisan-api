@@ -19,11 +19,10 @@ import javax.persistence.Table;
         allocationSize = 1 // 미리 할당 받을 시퀸스 수
 )
 public class OiPayUsage {
-	@Column(name="customer_id")
+	@Column
 	private int customerId;
 	
 	@Id
-	@Column(name="oi_pay_id")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="OI_PAY_SEQ_GENERATOR")
 	private int oiPayId;
 	
@@ -36,10 +35,10 @@ public class OiPayUsage {
 	@Column
 	private int remain;
 	
-	@Column(name="auction_id")
-	private Integer auctionId;
+	@Column
+	private int auctionId;
 	
-	@Column(name="create_at")
+	@Column
 	private Date createAt;
 	
 	public OiPayUsage() {}
@@ -55,7 +54,7 @@ public class OiPayUsage {
 		this.createAt = createAt;
 	}
 	
-	public OiPayUsage(int customerId, int type, int amount, int remain, Integer auctionId, Date createAt) {
+	public OiPayUsage(int customerId, int type, int amount, int remain, int auctionId, Date createAt) {
 		super();
 		this.customerId = customerId;
 		this.type = type;
