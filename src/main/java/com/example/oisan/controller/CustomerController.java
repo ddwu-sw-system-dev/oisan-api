@@ -4,20 +4,13 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.oisan.domain.Customer;
 import com.example.oisan.service.CustomerService;
-import com.example.oisan.command.CustomerUpdateCommand;
-import com.example.oisan.command.LoginCommand;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/customers")
 public class CustomerController {
 	
@@ -28,8 +21,9 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/create")
-	public Customer create(Customer newCustomer) {
-		return customerService.addCustomer(newCustomer);
+	public Customer create(@RequestBody CustomerCommand customerCom) {
+		System.out.println("customerCom = " + customerCom);
+		return customerService.addCustomer(customerCom);
 	}
 	
 	@PutMapping
@@ -50,8 +44,10 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/login")
-	public Customer loginCustomer(LoginCommand loginCustomer) {
-		return customerService.loginCustomer(loginCustomer);
+	public Customer loginCustomer(@RequestBody CustomerCommand customerCom) {
+		System.out.println(customerCom.getEmail());
+		System.out.println(customerCom.getPw());
+		return customerService.loginCustomer(customerCom.getEmail(), customerCom.getPw());
 	}
 	
 	@GetMapping
