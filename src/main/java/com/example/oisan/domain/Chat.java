@@ -24,7 +24,7 @@ public class Chat {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CHAT_SEQ_GENERATOR")
 	private int chatId;
 	
-	@Column(name="CUSTOMER_UD")
+	@Column(name="CUSTOMER_ID")
 	private int senderId;
 	
 	@Column(name="CHAT_ROOM_ID")
