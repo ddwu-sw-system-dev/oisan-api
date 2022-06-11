@@ -30,9 +30,14 @@ public class ChatRoomController {
 		return chatRoomService.createChatRoomByCustomerId(customer1Id, customer2Id);
 	}
 	
-	@PostMapping("/sendChat")
-	public ArrayList<Chat> sendChat(Chat newChat) {
-		return chatRoomService.sendChat(newChat);
+	@PostMapping("/sendChat/{chatRoomId}")
+	public ArrayList<Chat> sendChat(@PathVariable int chatRoomId, Chat newChat) {
+		return chatRoomService.sendChat(newChat, chatRoomId);
+	}
+	
+	@GetMapping("/getChatList/{chatRoomId}")
+	public ArrayList<Chat> getChatList(@PathVariable int chatRoomId) {
+		return chatRoomService.findChatList(chatRoomId);
 	}
 	
 	@DeleteMapping

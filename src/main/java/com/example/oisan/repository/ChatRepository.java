@@ -8,5 +8,5 @@ import com.example.oisan.domain.Chat;
 import com.example.oisan.domain.ChatRoom;
 
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
-	ArrayList<Chat> findChatListByChatRoomId(int chatRoomId);
+	ArrayList<Chat> findChatByChatRoomId(int chatRoomId);
 }

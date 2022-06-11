@@ -86,9 +86,13 @@ public class ChatRoomService {
 		return chatRoomRepository.findChatRoomByChatRoomId(chatRoomId);
 	}
 	
-	public ArrayList<Chat> sendChat(Chat newChat) {
+	public ArrayList<Chat> sendChat(Chat newChat, int chatRoomId) {
 		chatRepository.save(newChat);
-		return chatRepository.findChatListByChatRoomId(newChat.getChatRoomId());
+		return chatRepository.findChatByChatRoomId(chatRoomId);
+	}
+	
+	public ArrayList<Chat> findChatList(int chatRoomId) {
+		return chatRepository.findChatByChatRoomId(chatRoomId);
 	}
 	
 	public String toString() {
