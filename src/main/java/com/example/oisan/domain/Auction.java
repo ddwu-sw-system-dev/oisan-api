@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,8 +26,11 @@ public class Auction {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="AUCTION_SEQ_GENERATOR")
 	private int auctionId;
+
+	@ManyToOne
+	@JoinColumn(name="CUSTOMER_ID")
+	private Customer customer;
 	
-	private int customerId;
 	private int startBid; // 시작가
 	private int winningBid; // 최종가/현재가
 	private Date createAt;
@@ -45,10 +50,10 @@ public class Auction {
 	
 	public Auction() {}
 
-	public Auction(int customerId, int startBid, int winningBid, Date createAt, Date closingTime, int status,
+	public Auction(Customer customer, int startBid, int winningBid, Date createAt, Date closingTime, int status,
 			String title, String imageUrl, int categoryId, String desc, Furniture furniture) {
 		super();
-		this.customerId = customerId;
+		this.customer = customer;
 		this.startBid = startBid;
 		this.winningBid = winningBid;
 		this.createAt = createAt;
@@ -60,11 +65,12 @@ public class Auction {
 		this.desc = desc;
 		this.furniture = furniture;
 	}
-	public Auction(int auctionId, int customerId, int startBid, int winningBid, Date createAt, Date closingTime,
+
+	public Auction(int auctionId, Customer customer, int startBid, int winningBid, Date createAt, Date closingTime,
 			int status, String title, String imageUrl, int categoryId, String desc, Furniture furniture) {
 		super();
 		this.auctionId = auctionId;
-		this.customerId = customerId;
+		this.customer = customer;
 		this.startBid = startBid;
 		this.winningBid = winningBid;
 		this.createAt = createAt;
@@ -76,17 +82,18 @@ public class Auction {
 		this.desc = desc;
 		this.furniture = furniture;
 	}
+
 	public int getAuctionId() {
 		return auctionId;
 	}
 	public void setAuctionId(int auctionId) {
 		this.auctionId = auctionId;
 	}
-	public int getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 	public int getStartBid() {
 		return startBid;
@@ -151,7 +158,7 @@ public class Auction {
 	
 	@Override
 	public String toString() {
-		return "Auction [auctionId=" + auctionId + ", customerId=" + customerId + ", startBid=" + startBid
+		return "Auction [auctionId=" + auctionId + ", customer=" + customer.toString() + ", startBid=" + startBid
 				+ ", winningBid=" + winningBid + ", createAt=" + createAt + ", closingTime=" + closingTime + ", status="
 				+ status + ", title=" + title + ", imageUrl=" + imageUrl + ", categoryId=" + categoryId + ", desc="
 				+ desc + ", furniture=" + furniture + "]";
