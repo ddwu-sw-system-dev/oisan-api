@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.oisan.domain.Auction;
+import com.example.oisan.domain.Customer;
 
 public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
@@ -19,7 +20,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
 	List<Auction> findByCategoryIdAndFurnitureWidthBetweenAndFurnitureDepthBetweenAndFurnitureHeightBetween(int categoryId, int minWidth, int maxWidth, int minDepth, int maxDepth, int minHeight, int maxHeight);
 	
-	List<Auction> findByCustomerIdAndStatus(int customerId, int status);
+	List<Auction> findByCustomerAndStatus(Customer customer, int status);
 	
 	@Query(value="SELECT NAME FROM CATEGORY WHERE CATEG_ID = ?1", nativeQuery=true)
 	String findCategoryName(int categId);
@@ -31,5 +32,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE AUCTION SET STATUS = 0 WHERE CLOSING_TIME <= ?1", nativeQuery=true)
 	Auction closeAuction(Date curTime);
+	
+	List<Auction> findByTitleContaining(String word);
 	
 }

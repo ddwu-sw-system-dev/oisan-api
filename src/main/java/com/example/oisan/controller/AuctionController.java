@@ -120,11 +120,11 @@ public class AuctionController {
 		Customer customer = (Customer) session.getAttribute("Customer");
 		
 		//일치하는지 확인
-		if (!(customer.getCustomerId() == customerId)) {
+		if (!(customer.getCustomerId() == customer.getCustomerId())) {
 			return null;
 		}
 		
-		List<Auction> auctionList = auctionService.getWinningAuctionListByCustomerId(customerId);
+		List<Auction> auctionList = auctionService.getWinningAuctionListByCustomer(customer);
 		return auctionList;
 	}
 	
@@ -145,7 +145,7 @@ public class AuctionController {
 		HttpSession session = request.getSession();
 		Customer customer = (Customer) session.getAttribute("Customer");
 		
-		Auction auction = auctionService.insertAuction(auctionCom, customer.getCustomerId());
+		Auction auction = auctionService.insertAuction(auctionCom, customer);
 		
 		// 입찰한 금액만큼 차감
 		oiPayUsageService.useOiPay(auction.getCategoryId(), auctionCom.getPrice()); 
@@ -172,7 +172,7 @@ public class AuctionController {
 		Customer customer = (Customer) session.getAttribute("Customer");
 		
 		//일치하는지 확인
-		if (!(customer.getCustomerId() == auction.getCustomerId())) {
+		if (!(customer.getCustomerId() == auction.getCustomer().getCustomerId())) {
 			return null;
 		}
 		
@@ -192,7 +192,7 @@ public class AuctionController {
 		HttpSession session = request.getSession();
 		Customer customer = (Customer) session.getAttribute("Customer");
 
-		if (!(customer.getCustomerId() == auction.getCustomerId())) {
+		if (!(customer.getCustomerId() == auction.getCustomer().getCustomerId())) {
 			return;
 		}
 		

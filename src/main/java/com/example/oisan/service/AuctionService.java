@@ -12,6 +12,7 @@ import com.example.oisan.controller.AuctionCommand;
 import com.example.oisan.controller.AuctionFilterCommand;
 import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
+import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Furniture;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
@@ -62,11 +63,11 @@ public class AuctionService {
 		return auctionRepository.findCategoryName(categId);
 	}
 	
-	public List<Auction> getWinningAuctionListByCustomerId(int customerId) {
-		return auctionRepository.findByCustomerIdAndStatus(customerId, 1);
+	public List<Auction> getWinningAuctionListByCustomer(Customer customer) {
+		return auctionRepository.findByCustomerAndStatus(customer, 0);
 	}
 	
-	public Auction insertAuction(AuctionCommand auctionCom, int customerId) {
+	public Auction insertAuction(AuctionCommand auctionCom, Customer customer) {
 		
 		Runnable updateTableRunner = new Runnable() {
 			@Override
@@ -87,7 +88,7 @@ public class AuctionService {
 		calendar.add(Calendar.DATE, 2); // 이틀 뒤에 마감
 		
 		Auction auction = new Auction(
-				customerId,
+				customer,
 				auctionCom.getPrice(),
 				auctionCom.getPrice(),
 				date,
@@ -108,11 +109,12 @@ public class AuctionService {
 		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
 		Auction auction = new Auction(
 				auctionId,
-				curAuction.getCustomerId(),
+				curAuction.getCustomer(),
 				curAuction.getStartBid(),
+				auctionCom.getPrice(),
 				curAuction.getCreateAt(),
 				curAuction.getClosingTime(),
-				auctionCom.getPrice(),
+				curAuction.getStatus(),
 				auctionCom.getTitle(),
 				auctionCom.getDesc(),
 				auctionCom.getCategoryId(),
@@ -124,6 +126,10 @@ public class AuctionService {
 
 	public void deleteAuction(int auctionId) {
 		auctionRepository.deleteById(auctionId);
+	}
+	
+	public List<Auction> findAuctionByTitle(String word) {
+		return auctionRepository.findByTitleContaining(word);
 	}
 	
 }
