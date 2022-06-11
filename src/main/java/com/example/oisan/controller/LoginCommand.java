@@ -1,4 +1,4 @@
-package com.example.oisan.command;
+package com.example.oisan.controller;
 
 
 public class LoginCommand {

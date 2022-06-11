@@ -1,18 +1,14 @@
 package com.example.oisan.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.example.oisan.controller.CustomerCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.oisan.command.CustomerUpdateCommand;
-import com.example.oisan.command.LoginCommand;
+import com.example.oisan.controller.CustomerUpdateCommand;
+import com.example.oisan.controller.LoginCommand;
 import com.example.oisan.domain.Customer;
-import com.example.oisan.exception.NotMatchPwException;
-import com.example.oisan.exception.CustomerNotFoundException;
 import com.example.oisan.repository.CustomerRepository;
 
 
@@ -36,7 +32,9 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Customer addCustomer(Customer customer) {
+	public Customer addCustomer(CustomerCommand customerCom) {
+		Customer customer = new Customer(customerCom.getCustomerId(), customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
+				customerCom.getConfirmPw(), customerCom.getPhone(), customerCom.getNickname());
 		return customerRepository.save(customer);
 	}
 	
@@ -68,7 +66,7 @@ public class CustomerService {
 		return customerRepository.findCustomerByCustomerId(customerId);
 	}
 	
-	public Customer loginCustomer(LoginCommand loginCustomer) {
+	public Customer loginCustomer(String email, String pw) {
 //		if (loginCustomer.getEmail() == null || loginCustomer.getPw() == null)
 //			return null; //empty form
 //		Customer customer = getCustomerInfoByEmail(loginCustomer.getEmail());
@@ -76,7 +74,7 @@ public class CustomerService {
 //			return null; //customer not exist
 //		if (!customer.getPw().equals(loginCustomer.getPw()))
 //			return null; //password not match
-		return customerRepository.findCustomerByEmail(loginCustomer.getEmail());
+		return customerRepository.findCustomerByEmail(email);
 	}
 	
 //	public CustomerCreateCommand modifyCustomerInfo(CustomerModRequest modReq) { //CustomerModRequest 혜준이가 만들어줌
