@@ -5,10 +5,11 @@ import java.util.List;
 import com.example.oisan.controller.CustomerCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.oisan.controller.CustomerUpdateCommand;
-import com.example.oisan.controller.LoginCommand;
 import com.example.oisan.domain.Customer;
+import com.example.oisan.exception.CustomerNotFoundException;
 import com.example.oisan.repository.CustomerRepository;
 
 
@@ -32,7 +33,9 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Customer addCustomer(CustomerCommand customerCom) {
+	public Customer addCustomer(CustomerCommand customerCom) throws Exception{
+		if (customerRepository.findCustomerByEmail(customerCom.getEmail()) != null)
+			throw new Exception("email already in use");
 		Customer customer = new Customer(customerCom.getCustomerId(), customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
 				customerCom.getConfirmPw(), customerCom.getPhone(), customerCom.getNickname());
 		return customerRepository.save(customer);
@@ -66,15 +69,16 @@ public class CustomerService {
 		return customerRepository.findCustomerByCustomerId(customerId);
 	}
 	
-	public Customer loginCustomer(String email, String pw) {
-//		if (loginCustomer.getEmail() == null || loginCustomer.getPw() == null)
-//			return null; //empty form
-//		Customer customer = getCustomerInfoByEmail(loginCustomer.getEmail());
-//		if (customer == null)
-//			return null; //customer not exist
-//		if (!customer.getPw().equals(loginCustomer.getPw()))
-//			return null; //password not match
-		return customerRepository.findCustomerByEmail(email);
+	public Customer loginCustomer(String email, String pw) throws Exception{
+		Customer customer = customerRepository.findCustomerByEmail(email);
+		if (customer == null)
+			throw new Exception("customer not exist");
+		if (customer.getPw().equals(pw)) {
+			return customer;
+		}
+		else {
+			throw new Exception("wrong password");
+		}
 	}
 	
 //	public CustomerCreateCommand modifyCustomerInfo(CustomerModRequest modReq) { //CustomerModRequest 혜준이가 만들어줌

@@ -2,14 +2,24 @@ package com.example.oisan.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="CUSTOMER")
+@SequenceGenerator(
+        name = "CUSTOMER_SEQ_GENERATOR",
+        sequenceName = "CUSTOMER_SEQ", // 시퀸스 명
+        initialValue = 1, // 초기 값
+        allocationSize = 1 // 미리 할당 받을 시퀸스 수
+)
 public class Customer {
 	@Column(name="customer_id")
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="CUSTOMER_SEQ_GENERATOR")
 	private int customerId;
 	@Column(name="customer_name")
 	private String customerName;

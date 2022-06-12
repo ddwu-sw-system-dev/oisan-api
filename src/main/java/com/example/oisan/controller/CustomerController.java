@@ -21,7 +21,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/create")
-	public Customer create(@RequestBody CustomerCommand customerCom) {
+	public Customer create(@RequestBody CustomerCommand customerCom) throws Exception {
 		System.out.println("customerCom = " + customerCom);
 		return customerService.addCustomer(customerCom);
 	}
@@ -44,11 +44,19 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/login")
-	public Customer loginCustomer(@RequestBody CustomerCommand customerCom) {
+	public Customer loginCustomer(@RequestBody CustomerCommand customerCom) throws Exception {
 		System.out.println(customerCom.getEmail());
 		System.out.println(customerCom.getPw());
 		return customerService.loginCustomer(customerCom.getEmail(), customerCom.getPw());
 	}
+//
+//	
+//	@GetMapping("/logintest/{email}/{pw}")
+//	public Customer testloginCustomer(@PathVariable String email, @PathVariable String pw) throws Exception {
+//		System.out.println(email);
+//		System.out.println(pw);
+//		return customerService.loginCustomer(email,pw);
+//	}
 	
 	@GetMapping
 	public List<Customer> getCustomerList(){
