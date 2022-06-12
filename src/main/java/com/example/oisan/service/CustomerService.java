@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.oisan.controller.CustomerUpdateCommand;
-import com.example.oisan.controller.LoginCommand;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.repository.CustomerRepository;
 
@@ -32,9 +31,9 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Customer addCustomer(CustomerCommand customerCom) {
-		Customer customer = new Customer(customerCom.getCustomerId(), customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
-				customerCom.getConfirmPw(), customerCom.getPhone(), customerCom.getNickname());
+	public Customer addCustomer(String name, String email, String pw, String address, String phone, String nickname) {
+		Customer customer = new Customer(name, email, pw, address, phone, nickname);
+		System.out.println("customer = " + customer.getEmail());
 		return customerRepository.save(customer);
 	}
 	

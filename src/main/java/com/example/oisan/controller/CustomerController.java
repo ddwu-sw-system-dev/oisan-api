@@ -23,7 +23,13 @@ public class CustomerController {
 	@PostMapping("/create")
 	public Customer create(@RequestBody CustomerCommand customerCom) {
 		System.out.println("customerCom = " + customerCom);
-		return customerService.addCustomer(customerCom);
+		System.out.println("customerCom = " + customerCom.getEmail());
+		System.out.println("customerCom = " + customerCom.getPw());
+
+		Customer customer =  customerService.addCustomer(customerCom.getCustomerName(), customerCom.getEmail(),
+				customerCom.getPw(), customerCom.getAddress(), customerCom.getPhone(), customerCom.getNickname());
+		System.out.println("customerrrr= " + customer.getAddress());
+		return customer;
 	}
 	
 	@PutMapping
@@ -45,8 +51,6 @@ public class CustomerController {
 	
 	@PostMapping("/login")
 	public Customer loginCustomer(@RequestBody CustomerCommand customerCom) {
-		System.out.println(customerCom.getEmail());
-		System.out.println(customerCom.getPw());
 		return customerService.loginCustomer(customerCom.getEmail(), customerCom.getPw());
 	}
 	

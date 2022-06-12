@@ -34,6 +34,10 @@ public class PostService {
         return postRepository.findAll();
     }
 
+    public List<Post> findPostByCustomerId(int customerId) {
+        return postRepository.findByCustomerId(customerId);
+    }
+
     public Optional<Post> findPost(int postId) {
         return postRepository.findById(postId);
     }
