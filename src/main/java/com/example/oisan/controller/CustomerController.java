@@ -27,9 +27,9 @@ public class CustomerController {
 	}
 	
 	@PutMapping("/edit")
-	public void update(@RequestBody CustomerCommand customerCom) {
-		System.out.println("customerCom Update = " + customerCom);
-		customerService.updateCustomer(customerCom);
+	public Customer update(@RequestBody CustomerCommand customerCom) {
+		System.out.println("Update customerId = " + customerCom.getCustomerId());
+		return customerService.updateCustomer(customerCom);
 	}
 	
 	@DeleteMapping("/delete")

@@ -43,6 +43,7 @@ public class CustomerService {
 	
 	public Customer updateCustomer(CustomerCommand CustomerCom) {
 		Customer customer = new Customer();
+		customer.setCustomerId(CustomerCom.getCustomerId());
 		customer.setCustomerName(CustomerCom.getCustomerName());
 		customer.setEmail(CustomerCom.getEmail());
 		customer.setPw(CustomerCom.getPw());
