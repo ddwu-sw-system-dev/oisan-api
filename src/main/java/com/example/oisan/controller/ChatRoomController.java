@@ -3,6 +3,7 @@ package com.example.oisan.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import com.example.oisan.service.ChatRoomService;
 
 @RestController
 @RequestMapping("/chatRooms")
+@CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
 public class ChatRoomController {
 	
 	@Autowired
