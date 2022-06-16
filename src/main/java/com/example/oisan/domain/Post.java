@@ -7,7 +7,9 @@ import java.util.Date;
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int postId;
-    private int customerId;
+    @ManyToOne
+	@JoinColumn(name="CUSTOMER_ID")
+	private Customer customer;
     private int categId;
     private Date createAt;
     private String title;
@@ -24,9 +26,9 @@ public class Post {
 
     public Post() {}
 
-    public Post(int postId, int customerId, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
+    public Post(int postId, Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
         this.postId = postId;
-        this.customerId = customerId;
+        this.customer = customer;
         this.categId = categId;
         this.createAt = createAt;
         this.title = title;
@@ -38,8 +40,8 @@ public class Post {
         this.status = status;
     }
 
-    public Post(int customerId, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
-        this.customerId = customerId;
+    public Post(Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
+        this.customer = customer;
         this.categId = categId;
         this.createAt = createAt;
         this.title = title;
@@ -59,12 +61,12 @@ public class Post {
         this.postId = postId;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public int getCategId() {

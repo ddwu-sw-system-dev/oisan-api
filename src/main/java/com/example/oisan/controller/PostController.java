@@ -27,7 +27,7 @@ public class PostController {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");
 
-        Post post = postService.save(postCom, customer.getCustomerId());
+        Post post = postService.save(postCom, customer);
         return post;
     }
 
@@ -50,7 +50,7 @@ public class PostController {
 
         Post post = postService.findPost(postId).get();
 
-        if (!(customer.getCustomerId() == post.getCustomerId())) {
+        if (!(customer.getCustomerId() == post.getCustomer().getCustomerId())) {
             return null;
         }
         return post;
@@ -61,7 +61,7 @@ public class PostController {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");
 
-        postService.save(postCom, customer.getCustomerId());
+        postService.save(postCom, customer);
         return "redirect:/";
     }
 
@@ -72,7 +72,7 @@ public class PostController {
 
         Post post = postService.findPost(postId).get();
 
-        if (!(customer.getCustomerId() == post.getCustomerId())) {
+        if (!(customer.getCustomerId() == post.getCustomer().getCustomerId())) {
             return null;
         }
 
