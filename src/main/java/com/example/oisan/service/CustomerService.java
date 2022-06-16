@@ -5,11 +5,9 @@ import java.util.List;
 import com.example.oisan.controller.CustomerCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.oisan.controller.CustomerUpdateCommand;
 import com.example.oisan.domain.Customer;
-import com.example.oisan.exception.CustomerNotFoundException;
 import com.example.oisan.repository.CustomerRepository;
 
 
@@ -33,11 +31,9 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Customer addCustomer(CustomerCommand customerCom) throws Exception{
-		if (customerRepository.findCustomerByEmail(customerCom.getEmail()) != null)
-			throw new Exception("email already in use");
-		Customer customer = new Customer(customerCom.getCustomerId(), customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
-				customerCom.getConfirmPw(), customerCom.getPhone(), customerCom.getNickname());
+	public Customer addCustomer(CustomerCommand customerCom) {
+		Customer customer = new Customer(customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
+				customerCom.getAddress(), customerCom.getPhone(), customerCom.getNickname());
 		return customerRepository.save(customer);
 	}
 	
@@ -45,15 +41,15 @@ public class CustomerService {
 		customerRepository.deleteById(customerId);
 	}
 	
-	public Customer updateCustomer(CustomerUpdateCommand updateCustomer) {
+	public Customer updateCustomer(CustomerCommand CustomerCom) {
 		Customer customer = new Customer();
-		customer.setCustomerName(updateCustomer.getCustomerName());
-		customer.setEmail(updateCustomer.getEmail());
-		customer.setPw(updateCustomer.getPw());
-		customer.setAddress(updateCustomer.getAddress());
-		customer.setPhone(updateCustomer.getPhone());
-		customer.setNickname(updateCustomer.getNickname());
-		customer.setOiPay(updateCustomer.getOiPay());
+		customer.setCustomerName(CustomerCom.getCustomerName());
+		customer.setEmail(CustomerCom.getEmail());
+		customer.setPw(CustomerCom.getPw());
+		customer.setAddress(CustomerCom.getAddress());
+		customer.setPhone(CustomerCom.getPhone());
+		customer.setNickname(CustomerCom.getNickname());
+//		customer.setOiPay(CustomerCom.getOiPay());
 		return customerRepository.save(customer);
 	}
 	
@@ -69,16 +65,15 @@ public class CustomerService {
 		return customerRepository.findCustomerByCustomerId(customerId);
 	}
 	
-	public Customer loginCustomer(String email, String pw) throws Exception{
-		Customer customer = customerRepository.findCustomerByEmail(email);
-		if (customer == null)
-			throw new Exception("customer not exist");
-		if (customer.getPw().equals(pw)) {
-			return customer;
-		}
-		else {
-			throw new Exception("wrong password");
-		}
+	public Customer loginCustomer(String email, String pw) {
+//		if (loginCustomer.getEmail() == null || loginCustomer.getPw() == null)
+//			return null; //empty form
+//		Customer customer = getCustomerInfoByEmail(loginCustomer.getEmail());
+//		if (customer == null)
+//			return null; //customer not exist
+//		if (!customer.getPw().equals(loginCustomer.getPw()))
+//			return null; //password not match
+		return customerRepository.findCustomerByEmail(email);
 	}
 	
 //	public CustomerCreateCommand modifyCustomerInfo(CustomerModRequest modReq) { //CustomerModRequest 혜준이가 만들어줌

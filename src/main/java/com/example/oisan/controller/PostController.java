@@ -37,6 +37,12 @@ public class PostController {
         return posts;
     }
 
+    @GetMapping("/post/list/{customerId}")
+    public List<Post> getPostListByCustomerId(@PathVariable("customerId") int customerId) {
+        List<Post> posts = postService.findPostByCustomerId(customerId);
+        return posts;
+    }
+
     @GetMapping("/post")
     public Post getPost(@RequestParam("postId") int postId) {
         Post post = postService.findPost(postId).get();
@@ -65,7 +71,7 @@ public class PostController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/post")
+    @DeleteMapping("/post/delete")
     public String deletePost(@RequestParam("postId") int postId, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");

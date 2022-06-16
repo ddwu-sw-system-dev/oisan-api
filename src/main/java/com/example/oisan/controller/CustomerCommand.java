@@ -2,15 +2,11 @@ package com.example.oisan.controller;
 
 public class CustomerCommand {
 
-    private int customerId;
-
     private String customerName;
 
     private String email;
 
     private String pw;
-
-    private String confirmPw;
 
     private String address;
 
@@ -20,23 +16,13 @@ public class CustomerCommand {
 
     public CustomerCommand() {}
 
-    public CustomerCommand(int customerId, String customerName, String email, String pw, String confirmPw, String address, String phone, String nickname) {
-        this.customerId = customerId;
+    public CustomerCommand(String customerName, String email, String pw, String confirmPw, String address, String phone, String nickname) {
         this.customerName = customerName;
         this.email = email;
         this.pw = pw;
-        this.confirmPw = confirmPw;
         this.address = address;
         this.phone = phone;
         this.nickname = nickname;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -61,14 +47,6 @@ public class CustomerCommand {
 
     public void setPw(String pw) {
         this.pw = pw;
-    }
-
-    public String getConfirmPw() {
-        return confirmPw;
-    }
-
-    public void setConfirmPw(String confirmPw) {
-        this.confirmPw = confirmPw;
     }
 
     public String getAddress() {
