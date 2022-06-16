@@ -2,23 +2,21 @@ package com.example.oisan.controller;
 
 public class AuctionFilterCommand {
 	private int minWidth;
-	private int minDepth;
-	private int minHeight;
 	private int maxWidth;
+	private int minDepth;
 	private int maxDepth;
+	private int minHeight;
 	private int maxHeight;
-	
-	public AuctionFilterCommand(int minWidth, int minDepth, int minHeight, int maxWidth,
-			int maxDepth, int maxHeight) {
+		
+	public AuctionFilterCommand(int minWidth, int maxWidth, int minDepth, int maxDepth, int minHeight, int maxHeight) {
 		super();
 		this.minWidth = minWidth;
-		this.minDepth = minDepth;
-		this.minHeight = minHeight;
 		this.maxWidth = maxWidth;
+		this.minDepth = minDepth;
 		this.maxDepth = maxDepth;
+		this.minHeight = minHeight;
 		this.maxHeight = maxHeight;
 	}
-	
 	public int getMinWidth() {
 		return minWidth;
 	}
@@ -54,6 +52,12 @@ public class AuctionFilterCommand {
 	}
 	public void setMaxHeight(int maxHeight) {
 		this.maxHeight = maxHeight;
+	}
+
+	@Override
+	public String toString() {
+		return "AuctionFilterCommand [minWidth=" + minWidth + ", minDepth=" + minDepth + ", minHeight=" + minHeight
+				+ ", maxWidth=" + maxWidth + ", maxDepth=" + maxDepth + ", maxHeight=" + maxHeight + "]";
 	}
 	
 }

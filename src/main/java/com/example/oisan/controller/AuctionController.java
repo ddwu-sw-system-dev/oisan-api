@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -90,9 +91,16 @@ public class AuctionController {
 //		return auctionList;
 //	}
 	
-	@GetMapping(value="/list/{categoryId}") 
-	public List<Auction> getAuctionList(@PathVariable("categoryId") int categoryId, @RequestBody AuctionFilterCommand filterCom, HttpServletResponse response) throws IOException {
+	@GetMapping(value="/list") 
+	public List<Auction> getAuctionList(@RequestParam("categoryId") int categoryId, @RequestParam("minWidth") int minWidth, @RequestParam("maxWidth") int maxWidth,
+			@RequestParam("minDepth") int minDepth, @RequestParam("maxDepth") int maxDepth, @RequestParam("minHeight") int minHeight, @RequestParam("maxHeight") int maxHeight, HttpServletResponse response) throws IOException {
 		List<Auction> auctionList = null;
+		AuctionFilterCommand filterCom = null;
+		if (minWidth != -1) {
+			filterCom = new AuctionFilterCommand(minWidth, maxWidth, minDepth, maxDepth, minHeight, maxHeight);
+			
+			System.out.println("filterCom: " + filterCom.toString());
+		}
 		
 		if (categoryId == 0 && filterCom == null)	// 전체, 데이터 보낼 때 AuctionFilterCommand null로 만들어서 보내야 함
 			auctionList = auctionService.getAuctions();
