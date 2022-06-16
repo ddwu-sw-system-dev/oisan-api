@@ -1,6 +1,7 @@
 package com.example.oisan.service;
 
 import com.example.oisan.controller.PostCommand;
+import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Post;
 import com.example.oisan.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Post save(PostCommand postCom, int customerId) {
-        Post post = new Post(customerId, postCom.getCategId(), new Date(), postCom.getTitle(),
+    public Post save(PostCommand postCom, Customer customer) {
+        Post post = new Post(customer, postCom.getCategId(), new Date(), postCom.getTitle(),
                 postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1);
         return postRepository.save(post);
     }
