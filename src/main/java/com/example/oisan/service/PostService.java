@@ -27,7 +27,7 @@ public class PostService {
 
     public Post save(PostCommand postCom, Customer customer) {
         Post post = new Post(customer, postCom.getCategId(), new Date(), postCom.getTitle(),
-                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1);
+                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
         return postRepository.save(post);
     }
 

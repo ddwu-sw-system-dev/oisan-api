@@ -1,5 +1,6 @@
 package com.example.oisan.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +33,8 @@ public class ChatRoomController {
 	
 	@PostMapping("/sendChat/{chatRoomId}")
 	public ArrayList<Chat> sendChat(@PathVariable int chatRoomId, Chat newChat) {
+		LocalDateTime now = LocalDateTime.now();
+		newChat.setCreateAt(now);
 		return chatRoomService.sendChat(newChat, chatRoomId);
 	}
 	

@@ -23,10 +23,11 @@ public class Post {
     @Column(name="f_depth")
     private int depth;
     private int status;
+    private int price;
 
     public Post() {}
 
-    public Post(int postId, Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
+    public Post(int postId, Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status, int price) {
         this.postId = postId;
         this.customer = customer;
         this.categId = categId;
@@ -38,9 +39,10 @@ public class Post {
         this.height = height;
         this.depth = depth;
         this.status = status;
+        this.price = price;
     }
 
-    public Post(Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status) {
+    public Post(Customer customer, int categId, Date createAt, String title, String desc, String imageUrl, int width, int height, int depth, int status, int price) {
         this.customer = customer;
         this.categId = categId;
         this.createAt = createAt;
@@ -51,6 +53,7 @@ public class Post {
         this.height = height;
         this.depth = depth;
         this.status = status;
+        this.price = price;
     }
 
     public int getPostId() {
@@ -140,4 +143,12 @@ public class Post {
     public void setStatus(int status) {
         this.status = status;
     }
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
 }
