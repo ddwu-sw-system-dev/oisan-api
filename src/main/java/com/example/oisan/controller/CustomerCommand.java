@@ -25,14 +25,6 @@ public class CustomerCommand {
         this.nickname = nickname;
     }
 
-//    public int getCustomerId() {
-//        return customerId;
-//    }
-//
-//    public void setCustomerId(int customerId) {
-//        this.customerId = customerId;
-//    }
-
     public String getCustomerName() {
         return customerName;
     }

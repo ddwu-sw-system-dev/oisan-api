@@ -31,9 +31,9 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Customer addCustomer(String name, String email, String pw, String address, String phone, String nickname) {
-		Customer customer = new Customer(name, email, pw, address, phone, nickname);
-		System.out.println("customer = " + customer.getEmail());
+	public Customer addCustomer(CustomerCommand customerCom) {
+		Customer customer = new Customer(customerCom.getCustomerName(), customerCom.getEmail(), customerCom.getPw(),
+				customerCom.getAddress(), customerCom.getPhone(), customerCom.getNickname());
 		return customerRepository.save(customer);
 	}
 	
@@ -41,15 +41,15 @@ public class CustomerService {
 		customerRepository.deleteById(customerId);
 	}
 	
-	public Customer updateCustomer(CustomerUpdateCommand updateCustomer) {
+	public Customer updateCustomer(CustomerCommand CustomerCom) {
 		Customer customer = new Customer();
-		customer.setCustomerName(updateCustomer.getCustomerName());
-		customer.setEmail(updateCustomer.getEmail());
-		customer.setPw(updateCustomer.getPw());
-		customer.setAddress(updateCustomer.getAddress());
-		customer.setPhone(updateCustomer.getPhone());
-		customer.setNickname(updateCustomer.getNickname());
-		customer.setOiPay(updateCustomer.getOiPay());
+		customer.setCustomerName(CustomerCom.getCustomerName());
+		customer.setEmail(CustomerCom.getEmail());
+		customer.setPw(CustomerCom.getPw());
+		customer.setAddress(CustomerCom.getAddress());
+		customer.setPhone(CustomerCom.getPhone());
+		customer.setNickname(CustomerCom.getNickname());
+//		customer.setOiPay(CustomerCom.getOiPay());
 		return customerRepository.save(customer);
 	}
 	

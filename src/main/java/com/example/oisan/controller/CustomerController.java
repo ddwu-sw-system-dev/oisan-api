@@ -23,21 +23,16 @@ public class CustomerController {
 	@PostMapping("/create")
 	public Customer create(@RequestBody CustomerCommand customerCom) {
 		System.out.println("customerCom = " + customerCom);
-		System.out.println("customerCom = " + customerCom.getEmail());
-		System.out.println("customerCom = " + customerCom.getPw());
-
-		Customer customer =  customerService.addCustomer(customerCom.getCustomerName(), customerCom.getEmail(),
-				customerCom.getPw(), customerCom.getAddress(), customerCom.getPhone(), customerCom.getNickname());
-		System.out.println("customerrrr= " + customer.getAddress());
-		return customer;
+		return customerService.addCustomer(customerCom);
 	}
 	
-	@PutMapping
-	public void update(CustomerUpdateCommand updateCustomer) {
-		customerService.updateCustomer(updateCustomer);
+	@PutMapping("/edit")
+	public void update(@RequestBody CustomerCommand customerCom) {
+		System.out.println("customerCom Update = " + customerCom);
+		customerService.updateCustomer(customerCom);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/delete")
 	public void delete(@PathVariable String customerId) {
 		int id = Integer.parseInt(customerId);
 		customerService.deleteCustomer(id);
@@ -51,10 +46,12 @@ public class CustomerController {
 	
 	@PostMapping("/login")
 	public Customer loginCustomer(@RequestBody CustomerCommand customerCom) {
+		System.out.println(customerCom.getEmail());
+		System.out.println(customerCom.getPw());
 		return customerService.loginCustomer(customerCom.getEmail(), customerCom.getPw());
 	}
 	
-	@GetMapping
+	@GetMapping("/list")
 	public List<Customer> getCustomerList(){
 		return customerService.getCustomers();
 	}

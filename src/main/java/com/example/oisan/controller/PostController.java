@@ -71,7 +71,7 @@ public class PostController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/post")
+    @DeleteMapping("/post/delete")
     public String deletePost(@RequestParam("postId") int postId, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("Customer");
