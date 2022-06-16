@@ -2,6 +2,8 @@ package com.example.oisan.controller;
 
 public class CustomerCommand {
 
+    private int customerId;
+
     private String customerName;
 
     private String email;
@@ -23,6 +25,14 @@ public class CustomerCommand {
         this.address = address;
         this.phone = phone;
         this.nickname = nickname;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
