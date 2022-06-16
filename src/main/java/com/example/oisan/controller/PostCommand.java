@@ -12,6 +12,7 @@ public class PostCommand {
     private int depth;
     private int categId;
     private List<String> tagList;
+    private int price;
 
     public String getTitle() {
         return title;
@@ -76,4 +77,13 @@ public class PostCommand {
     public void setTagList(List<String> tagList) {
         this.tagList = tagList;
     }
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+    
 }
