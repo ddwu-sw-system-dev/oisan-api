@@ -1,17 +1,18 @@
 package com.example.oisan.service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.oisan.domain.OiPayUsage;
 import com.example.oisan.repository.OiPayUsageRepository;
+import com.example.oisan.repository.CustomerRepository;
 
 @Service
+@Transactional
 public class OiPayUsageService {
 
 	@Autowired
@@ -20,6 +21,11 @@ public class OiPayUsageService {
 		this.oiPayUsageRepository = oiPayUsageRepository;
 	}
 
+	@Autowired
+	private CustomerRepository customerRepository;
+	public void setCustomerRepository(CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
+	}
 	
 	public OiPayUsageService() {}
 	
@@ -43,7 +49,7 @@ public class OiPayUsageService {
 		// OiPayUsage(int customerId, int oiPayId, int type, int amount, int remain, int auctionId, Date createAt);
 		// OiPayUsage(int customerId, int type, int amount, int remain, Integer auctionId, Date createAt)
 		OiPayUsage current = new OiPayUsage(customerId, 0, amount, remain, 0, date); //auction_id 수정
-		
+		customerRepository.updateOipayByCustomerId(remain, customerId);
 		
 		return oiPayUsageRepository.save(current);
 	}
@@ -66,6 +72,7 @@ public class OiPayUsageService {
 		remain  = remain - amount;
 		
 		OiPayUsage current = new OiPayUsage(customerId, 1, amount, remain, 0, date);//auction_id 수정
+		customerRepository.updateOipayByCustomerId(remain, customerId);
 		
 		return oiPayUsageRepository.save(current);
 	}
