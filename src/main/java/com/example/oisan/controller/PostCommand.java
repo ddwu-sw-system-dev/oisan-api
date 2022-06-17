@@ -2,13 +2,15 @@ package com.example.oisan.controller;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class PostCommand {
 
     private int postId;
     private int customerId;
     private String title;
     private String desc;
-    private String imageUrl;
+    private MultipartFile image;
     private int width;
     private int height;
     private int depth;
@@ -48,12 +50,12 @@ public class PostCommand {
         this.desc = desc;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public MultipartFile getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     public int getWidth() {

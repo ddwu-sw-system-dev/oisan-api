@@ -15,7 +15,9 @@ import com.example.oisan.repository.TagPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PostService {
+	
+	@Autowired
+	private S3FileUploadService s3FileUploadService;
+	public void setS3FileUploadService(S3FileUploadService s3FileUploadService) {
+        this.s3FileUploadService = s3FileUploadService;
+    }
     
     @Autowired
     private TagPostRepository tagPostRepository;
@@ -60,18 +68,24 @@ public class PostService {
 
     public Post createPost(PostCommand postCom) {
         Customer customer = customerRepository.findCustomerByCustomerId(postCom.getCustomerId());
-        
+        String image_url = null;
+		try {
+			image_url = s3FileUploadService.upload(postCom.getImage());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         Post post = new Post(customer, postCom.getCategId(), new Date(), postCom.getTitle(),
-                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
+                postCom.getDesc(), image_url, postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
         return postRepository.save(post);
     }
 
     public Post updatePost(PostCommand postCom) {
-        Customer customer = customerRepository.findCustomerByCustomerId(postCom.getCustomerId());
-
-        Post post = new Post(postCom.getPostId(), customer, postCom.getCategId(), new Date(), postCom.getTitle(),
-                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
-        return postRepository.save(post);
+//        Customer customer = customerRepository.findCustomerByCustomerId(postCom.getCustomerId());
+//
+//        Post post = new Post(postCom.getPostId(), customer, postCom.getCategId(), new Date(), postCom.getTitle(),
+//                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
+//        return postRepository.save(post);
+    	return null;
     }
 
     public List<Post> findPosts() {
