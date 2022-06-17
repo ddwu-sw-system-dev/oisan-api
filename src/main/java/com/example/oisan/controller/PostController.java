@@ -136,6 +136,10 @@ public class PostController {
     	postService.updateStatusByPostId(0, postId);
     	return postService.findPost(postId).get();
     }
-    
 
+    @PutMapping("/post/open") // 거래중 상태로 업데이트
+    public Post updatePostOpen(@RequestParam("postId") int postId) {
+        postService.updateStatusByPostId(1, postId);
+        return postService.findPost(postId).get();
+    }
 }
