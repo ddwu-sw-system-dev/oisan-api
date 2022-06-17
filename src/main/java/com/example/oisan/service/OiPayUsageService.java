@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.OiPayUsage;
 import com.example.oisan.repository.OiPayUsageRepository;
 import com.example.oisan.repository.CustomerRepository;
@@ -63,11 +64,8 @@ public class OiPayUsageService {
 		Date date = new Date();
 		int remain = 0;
 		
-		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
-
-		if (lastUsage != null) { // 마지막 사용내역이 있다면
-			remain = lastUsage.getRemain();
-		}
+		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
+		remain = customer.getOiPay();
 		
 		if (amount > remain) {
 			//잔액보다 사용하고자 하는 양이 크면 예외 처리해야됨

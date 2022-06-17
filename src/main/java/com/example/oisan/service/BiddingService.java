@@ -40,7 +40,8 @@ public class BiddingService {
 				customerId,
 				auctionId,
 				price,
-				new Date());
+				new Date(),
+				0);
 		Bidding savedBidding = biddingRepository.save(bidding);
 		auctionRepository.updateWinningBid(bidding.getPrice(), bidding.getAuctionId());
 		return savedBidding;
