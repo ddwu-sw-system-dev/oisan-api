@@ -2,6 +2,7 @@ package com.example.oisan.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="POST")
@@ -31,6 +32,9 @@ public class Post {
     private int depth;
     private int status;
     private int price;
+    @OneToMany
+    @JoinColumn(name="POST_ID")
+    private List<PostLike> postLikeList;
 
     public Post() {}
 
@@ -158,4 +162,13 @@ public class Post {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
+	public List<PostLike> getLikePost() {
+		return postLikeList;
+	}
+
+	public void setLikePost(PostLike postLike) {
+		this.postLikeList.add(postLike);
+	}
+	
 }
