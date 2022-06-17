@@ -27,8 +27,8 @@ public class BiddingService {
 	
 	public BiddingService() {}
 	
-	public List<Bidding> getBiddings(int auctionId) {
-		return biddingRepository.findAll();
+	public List<Bidding> getBiddingsByAuctionId(int auctionId) {
+		return biddingRepository.findByAuctionIdOrderByBiddingIdDesc(auctionId);
 	}
 	
 	public List<Bidding> getBiddingsByCustomerId(int customerId) {
