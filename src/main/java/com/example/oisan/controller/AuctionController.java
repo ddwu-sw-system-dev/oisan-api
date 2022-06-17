@@ -60,7 +60,7 @@ public class AuctionController {
 //		}
 //		return auctionList;  // convert list of orders to JSON text in response body
 //	}
-//	
+	
 //	@GetMapping(value="/list/{categoryId}")
 //	public List<Auction> getAuctionListByCategory(@PathVariable("categoryId") String categoryId, HttpServletResponse response) throws IOException {
 //		List<Auction> auctionList = auctionService.getAuctionsByCategory(categoryId);
@@ -156,7 +156,7 @@ public class AuctionController {
 		Auction auction = auctionService.insertAuction(auctionCom, customer);
 		
 		// 입찰한 금액만큼 차감
-		oiPayUsageService.useOiPay(auction.getCategoryId(), auctionCom.getPrice()); 
+		oiPayUsageService.useOiPay(auction.getCategoryId(), auctionCom.getPrice(), auction.getAuctionId()); 
 		
 		// 직전 입찰 환불
 		Bidding lastBidding = biddingService.getLastBidding(auction.getAuctionId());

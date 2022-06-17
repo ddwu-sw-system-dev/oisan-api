@@ -30,7 +30,7 @@ public class OiPayUsageUseController {
 	public OiPayUsage recharge(@RequestBody OiPayUsageUseCommand useReq) {		
 		System.out.println("oipay use Request :" + useReq);
 		
-		OiPayUsage response = oiPayUsageService.useOiPay(useReq.getCustomerId(), useReq.getAmount());
+		OiPayUsage response = oiPayUsageService.useOiPay(useReq.getCustomerId(), useReq.getAmount(), useReq.getAuctionId());
 		
 		return response; 
 	}

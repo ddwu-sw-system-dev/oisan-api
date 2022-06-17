@@ -13,5 +13,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByTitleContaining(String title);
 
-    List<Post> findByCustomerId(int customerId);
+    List<Post> findByCustomerCustomerId(int customerId);
 }

@@ -36,7 +36,7 @@ public class PostService {
     }
 
     public List<Post> findPostByCustomerId(int customerId) {
-        return postRepository.findByCustomerId(customerId);
+        return postRepository.findByCustomerCustomerId(customerId);
     }
 
     public Optional<Post> findPost(int postId) {

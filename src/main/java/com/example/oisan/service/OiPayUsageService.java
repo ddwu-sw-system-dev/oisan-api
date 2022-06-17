@@ -54,7 +54,7 @@ public class OiPayUsageService {
 		return oiPayUsageRepository.save(current);
 	}
 	
-	public OiPayUsage useOiPay(int customerId, int amount) {
+	public OiPayUsage useOiPay(int customerId, int amount,  int auctionId) {
 		Date date = new Date();
 		int remain = 0;
 		
@@ -71,7 +71,8 @@ public class OiPayUsageService {
 		
 		remain  = remain - amount;
 		
-		OiPayUsage current = new OiPayUsage(customerId, 1, amount, remain, 0, date);//auction_id 수정
+		// 규칙: auctionId가 없으면 0으로
+		OiPayUsage current = new OiPayUsage(customerId, 1, amount, remain, auctionId, date);//auction_id 수정
 		customerRepository.updateOipayByCustomerId(remain, customerId);
 		
 		return oiPayUsageRepository.save(current);
