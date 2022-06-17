@@ -14,7 +14,7 @@ public interface BiddingRepository extends JpaRepository<Bidding, Integer> {
 	Bidding findTopByAuctionIdOrderByBiddingIdDesc(int auctionId);
 	
 	List<Bidding> findByCustomerId(int customerId);
-	
+
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE BIDDING SET WINNER = 1 WHERE BIDDING_ID = ?1", nativeQuery=true)

@@ -2,8 +2,10 @@ package com.example.oisan.controller;
 
 import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Customer;
+import com.example.oisan.domain.Moodtag;
 import com.example.oisan.domain.Post;
 import com.example.oisan.domain.PostLike;
+import com.example.oisan.domain.TagPost;
 import com.example.oisan.service.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,12 +80,66 @@ public class PostController {
     	return postService.likePost(pId, cId);
     }
     
-    //test
-//    private final S3Uploader s3Uploader;
-//
-//    @PostMapping("/images")
-//    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
-//        s3Uploader.upload(multipartFile, "static");
-//        return "test";
-//    }
+    @SuppressWarnings("null")
+	@GetMapping("/post/tag/list") // post에 포함된 tag list
+    public List<String> findTagPostsByPostId(@RequestParam("postId") int postId) {
+        List<String> tagList = null;
+        List<TagPost> tagPostList = postService.findTagPostsByPostId(postId);
+
+        if (tagPostList != null) {
+        	tagList = new ArrayList<>();
+            for (TagPost t : tagPostList) {
+            	tagList.add(t.getMoodtag().getName());
+            }
+        }
+        return tagList;
+    }
+
+    @SuppressWarnings("null")
+    @GetMapping("/tag/list") // tag에 포함된 post list
+    public List<Post> findTagPostsByMoodtagId(@RequestParam("moodtagId") int moodtagId) {
+        List<Post> postList = null;
+        List<TagPost> tagPostList = postService.findTagPostsByMoodtagId(moodtagId);
+
+        if (tagPostList != null) {
+        	postList = new ArrayList<>();
+            for (TagPost p : tagPostList) {
+            	postList.add(p.getPost());
+            }
+        }
+    	return postList;
+    }
+
+    @SuppressWarnings("null")
+    @GetMapping("/post/tag/create") // request에 tags는 ","으로 연결된 태그들 // 글 쓸 때 호출하고, 이후 수정(추가)할 때 호출하면 될 듯
+    public Post createTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
+        String[] tagList = tags.split(",");
+
+        for (String s : tagList) {
+        	Moodtag moodtag = postService.findByName(s.trim());
+        	if (moodtag == null) {
+        		moodtag = postService.saveMoodtag(s.trim());
+        	}
+        	postService.saveTagPost(moodtag.getMoodtagId(), postId);
+        }
+        return postService.findPost(postId).get();
+    }
+    
+    @GetMapping("/post/tag/delete")
+    public Post deleteTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
+        String[] tagList = tags.split(",");
+
+        for (String s : tagList) {
+        	Moodtag moodtag = postService.findByName(s.trim());
+        	postService.deleteTagPost(moodtag.getMoodtagId(), postId);
+        }
+        return postService.findPost(postId).get();
+    }
+    
+    @PutMapping("/post/complete") // 거래 완료 상태로 업데이트
+    public Post updatePostComplete(@RequestParam("postId") int postId) {
+    	postService.updateStatusByPostId(0, postId);
+    	return postService.findPost(postId).get();
+    }
+    
 }
