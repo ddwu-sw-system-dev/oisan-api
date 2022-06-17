@@ -1,10 +1,7 @@
 package com.example.oisan.controller;
 
-import com.example.oisan.domain.Auction;
-import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Moodtag;
 import com.example.oisan.domain.Post;
-import com.example.oisan.domain.PostLike;
 import com.example.oisan.domain.TagPost;
 import com.example.oisan.service.PostService;
 
@@ -12,18 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostController {
 
+//	public static final DefaultRes FAIL_DEFAULT_RES = new DefaultRes(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR);
     private final PostService postService;
 
     @Autowired
@@ -32,7 +27,7 @@ public class PostController {
     }
 
     @PostMapping("/post/new")
-    public Post createPost(@RequestBody PostCommand postCom) {
+    public Post createPost(PostCommand postCom) {
         Post post = postService.createPost(postCom);
         return post;
     }
@@ -142,4 +137,5 @@ public class PostController {
     	return postService.findPost(postId).get();
     }
     
+
 }
