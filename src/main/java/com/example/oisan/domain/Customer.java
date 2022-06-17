@@ -1,10 +1,14 @@
 package com.example.oisan.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,6 +39,9 @@ public class Customer {
 	private String nickname;
 	@Column(name="oi_pay")
 	private int oiPay;
+	@OneToMany
+    @JoinColumn(name="CUSTOMER_ID")
+    private List<PostLike> likePostList;
 	
 	public Customer() {}
 	
@@ -107,6 +114,14 @@ public class Customer {
 	}
 	public String toString() {
 		return this.customerName;
+	}
+
+	public List<PostLike> getLikePostList() {
+		return likePostList;
+	}
+
+	public void setLikePostList(List<PostLike> likePostList) {
+		this.likePostList = likePostList;
 	}
 	
 }

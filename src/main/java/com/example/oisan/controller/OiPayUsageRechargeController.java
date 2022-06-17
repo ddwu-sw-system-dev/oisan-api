@@ -1,5 +1,9 @@
 package com.example.oisan.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.oisan.domain.OiPayUsage;
 import org.springframework.stereotype.Controller;
@@ -26,12 +30,15 @@ public class OiPayUsageRechargeController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public OiPayUsage recharge(@RequestBody OiPayUsageRechargeCommand chargeReq) {		
+	public OiPayUsage recharge(@RequestBody OiPayUsageRechargeCommand chargeReq, HttpServletResponse response) throws IOException {		
 		System.out.println("charge Request :" + chargeReq);
 		
-		OiPayUsage response = oiPayUsageService.chargeOiPay(chargeReq.getCustomerId(), chargeReq.getAmount());
+		OiPayUsage chargeSuccess = oiPayUsageService.chargeOiPay(chargeReq.getCustomerId(), chargeReq.getAmount());
 		
-		return response; 
+		if(chargeSuccess == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
+		return chargeSuccess; 
 	}
 	
 	

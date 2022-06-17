@@ -1,5 +1,9 @@
 package com.example.oisan.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,12 +31,15 @@ public class OiPayUsageUseController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	@CrossOrigin(origins = "http://localhost:3000/oipay", allowedHeaders = "*")
-	public OiPayUsage recharge(@RequestBody OiPayUsageUseCommand useReq) {		
+	public OiPayUsage recharge(@RequestBody OiPayUsageUseCommand useReq, HttpServletResponse response) throws IOException {		
 		System.out.println("oipay use Request :" + useReq);
 		
-		OiPayUsage response = oiPayUsageService.useOiPay(useReq.getCustomerId(), useReq.getAmount(), useReq.getAuctionId());
+		OiPayUsage useSuccess = oiPayUsageService.useOiPay(useReq.getCustomerId(), useReq.getAmount(), useReq.getAuctionId());
 		
-		return response; 
+		if(useSuccess == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
+		return useSuccess; 
 	}
 	
 }
