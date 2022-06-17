@@ -34,6 +34,7 @@ public class OiPayUsageService {
 		return oiPayUsageRepository.findByCustomerIdOrderByOiPayIdDesc(customerId);
 	}
 	
+	@Transactional
 	public OiPayUsage chargeOiPay(int customerId, int amount) {
 		System.out.println("charge Id =" + customerId);
 		Date date = new Date();
@@ -49,11 +50,15 @@ public class OiPayUsageService {
 		// OiPayUsage(int customerId, int oiPayId, int type, int amount, int remain, int auctionId, Date createAt);
 		// OiPayUsage(int customerId, int type, int amount, int remain, Integer auctionId, Date createAt)
 		OiPayUsage current = new OiPayUsage(customerId, 0, amount, remain, 0, date); //auction_id 수정
-		customerRepository.updateOipayByCustomerId(remain, customerId);
+		int updateSuccess = customerRepository.updateOipayByCustomerId(remain, customerId);
+		if (updateSuccess == 0) {
+			return null;
+		}
 		
 		return oiPayUsageRepository.save(current);
 	}
 	
+	@Transactional
 	public OiPayUsage useOiPay(int customerId, int amount,  int auctionId) {
 		Date date = new Date();
 		int remain = 0;
@@ -73,7 +78,10 @@ public class OiPayUsageService {
 		
 		// 규칙: auctionId가 없으면 0으로
 		OiPayUsage current = new OiPayUsage(customerId, 1, amount, remain, auctionId, date);//auction_id 수정
-		customerRepository.updateOipayByCustomerId(remain, customerId);
+		int updateSuccess = customerRepository.updateOipayByCustomerId(remain, customerId);
+		if (updateSuccess == 0) {
+			return null;
+		}
 		
 		return oiPayUsageRepository.save(current);
 	}
