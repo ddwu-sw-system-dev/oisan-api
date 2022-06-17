@@ -64,14 +64,11 @@ public class BiddingController {
 
 	@PostMapping(value="/{auctionId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Bidding createBidding(@PathVariable("auctionId") int auctionId, @RequestParam("price") int price, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 현재 로그인한 유저 가져와서 넣어야 함
-		HttpSession session = request.getSession();
-		Customer customer = (Customer) session.getAttribute("Customer");
+	public Bidding createBidding(@PathVariable("auctionId") int auctionId, @RequestParam("price") int price, @RequestParam("customerId") int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		// 입찰한 금액만큼 차감
 		Auction auction = auctionService.findAuctionById(auctionId);
-		Bidding bidding = biddingService.insertBidding(price, auctionId, customer.getCustomerId());
+		Bidding bidding = biddingService.insertBidding(price, auctionId, customerId);
 		oiPayUsageService.useOiPay(auction.getCustomer().getCustomerId(), auction.getWinningBid(), auction.getAuctionId()); 
 		
 		// 직전 입찰 환불

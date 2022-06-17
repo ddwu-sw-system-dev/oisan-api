@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oisan.domain.Auction;
@@ -92,19 +90,12 @@ public class AuctionController {
 	}
 	
 	@PostMapping(value="/create")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Auction createAuction(@RequestBody AuctionCommand auctionCom, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 현재 로그인한 유저 가져와서 넣어야 함
-		HttpSession session = request.getSession();
-		Customer customer = (Customer) session.getAttribute("Customer");
-		
-		Auction auction = auctionService.insertAuction(auctionCom, customer);
-		
+	public Auction createAuction(@RequestBody AuctionCommand auctionCom, @RequestParam int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Auction auction = auctionService.insertAuction(auctionCom, customerId);
 		return auction;
 	}
 	
 	@PutMapping(value = "/{auctionId}")
-	@ResponseStatus(HttpStatus.OK)
 	public Auction updateAuction(@PathVariable("auctionId") int auctionId, 
 			@RequestBody AuctionCommand auctionCom, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.findAuctionById(auctionId);
@@ -112,16 +103,6 @@ public class AuctionController {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		}
-		
-		// 현재 로그인한 유저와 비교해서 일치하면 진행
-		HttpSession session = request.getSession();
-		Customer customer = (Customer) session.getAttribute("Customer");
-		
-		//일치하는지 확인
-		if (!(customer.getCustomerId() == auction.getCustomer().getCustomerId())) {
-			return null;
-		}
-		
 		Auction updatedAuction = auctionService.updateAuction(auctionId, auctionCom);
 		return updatedAuction;
 	}
@@ -133,15 +114,6 @@ public class AuctionController {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-		
-		// 현재 로그인한 유저와 비교해서 일치하면 진행
-		HttpSession session = request.getSession();
-		Customer customer = (Customer) session.getAttribute("Customer");
-
-		if (!(customer.getCustomerId() == auction.getCustomer().getCustomerId())) {
-			return;
-		}
-		
 		auctionService.deleteAuction(auctionId);
 	}
 }
