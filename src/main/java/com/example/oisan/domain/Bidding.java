@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class Bidding {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BIDDING_SEQ_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BIDDING_GENERATOR")
 	private int biddingId;
 
 	private int customerId;

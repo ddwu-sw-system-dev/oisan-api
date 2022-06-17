@@ -92,6 +92,7 @@ public class AuctionController {
 	@PostMapping(value="/create")
 	public Auction createAuction(@RequestBody AuctionCommand auctionCom, @RequestParam int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.insertAuction(auctionCom, customerId);
+		auctionService.makeTaskScheduler(auction.getAuctionId());
 		return auction;
 	}
 	

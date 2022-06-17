@@ -76,23 +76,10 @@ public class AuctionService {
 	
 	public Auction insertAuction(AuctionCommand auctionCom, int customerId) {
 		
-		Runnable updateTableRunner = new Runnable() {
-			@Override
-			public void run() {
-				Date curTime = new Date();
-				Auction auction = auctionRepository.closeAuction(curTime);
-				
-				Bidding bidding = biddingRepository.findTopByAuctionIdOrderByBiddingIdDesc(auction.getAuctionId());
-				if (bidding != null) {
-					biddingRepository.updateWinner(bidding.getBiddingId());
-				}
-			}
-		};
-		
 		Date date = new Date();	
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 2); // 이틀 뒤에 마감
+		calendar.add(Calendar.DATE, 1); // 하루 뒤에 마감
 		
 		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
 		
@@ -108,10 +95,29 @@ public class AuctionService {
 				auctionCom.getCategoryId(),
 				auctionCom.getImageUrl(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
-
-		scheduler.schedule(updateTableRunner, calendar.getTime());
 		
 		return auctionRepository.save(auction);
+	}
+	
+	public void makeTaskScheduler(int auctionId) {
+		Runnable updateTableRunner = new Runnable() {
+			@Override
+			public void run() {
+				Date curTime = new Date();
+				auctionRepository.closeAuction(curTime);
+				
+				Bidding bidding = biddingRepository.findTopByAuctionIdOrderByBiddingIdDesc(auctionId);
+				if (bidding != null) {
+					biddingRepository.updateWinner(bidding.getBiddingId());
+				}
+			}
+		};
+
+		Date date = new Date();	
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 1);
+		scheduler.schedule(updateTableRunner, calendar.getTime());
 	}
 	
 	public Auction updateAuction(int auctionId, AuctionCommand auctionCom) {
