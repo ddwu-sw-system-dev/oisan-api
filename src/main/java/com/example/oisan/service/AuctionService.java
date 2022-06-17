@@ -16,6 +16,7 @@ import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Furniture;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
+import com.example.oisan.repository.CustomerRepository;
 
 @Service
 public class AuctionService {
@@ -30,6 +31,12 @@ public class AuctionService {
 	private BiddingRepository biddingRepository;
 	public void setBiddingRepository(BiddingRepository biddingRepository) {
 		this.biddingRepository = biddingRepository;
+	}
+	
+	@Autowired
+	private CustomerRepository customerRepository;
+	public void setCustomerRepository(CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
 	}
 	
 	@Autowired
@@ -67,7 +74,7 @@ public class AuctionService {
 		return auctionRepository.findByCustomerAndStatus(customer, 0);
 	}
 	
-	public Auction insertAuction(AuctionCommand auctionCom, Customer customer) {
+	public Auction insertAuction(AuctionCommand auctionCom, int customerId) {
 		
 		Runnable updateTableRunner = new Runnable() {
 			@Override
@@ -86,6 +93,8 @@ public class AuctionService {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, 2); // 이틀 뒤에 마감
+		
+		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
 		
 		Auction auction = new Auction(
 				customer,
