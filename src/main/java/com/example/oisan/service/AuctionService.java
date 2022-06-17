@@ -91,9 +91,9 @@ public class AuctionService {
 				calendar.getTime(),
 				1,
 				auctionCom.getTitle(),
-				auctionCom.getDesc(),
-				auctionCom.getCategoryId(),
 				auctionCom.getImageUrl(),
+				auctionCom.getCategoryId(),
+				auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
 		
 		return auctionRepository.save(auction);
@@ -131,9 +131,9 @@ public class AuctionService {
 				curAuction.getClosingTime(),
 				curAuction.getStatus(),
 				auctionCom.getTitle(),
-				auctionCom.getDesc(),
-				auctionCom.getCategoryId(),
 				auctionCom.getImageUrl(),
+				auctionCom.getCategoryId(),
+				auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
 		return auctionRepository.save(auction);
 		
