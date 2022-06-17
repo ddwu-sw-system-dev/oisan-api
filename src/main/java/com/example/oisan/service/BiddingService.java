@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.oisan.controller.BiddingCommand;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
@@ -36,11 +35,11 @@ public class BiddingService {
 		return biddingRepository.findByCustomerId(customerId);
 	}
 	
-	public Bidding insertBidding(BiddingCommand biddingCom, int customerId) {
+	public Bidding insertBidding(int price, int auctionId, int customerId) {
 		Bidding bidding = new Bidding(
 				customerId,
-				biddingCom.getAuctionId(),
-				biddingCom.getPrice(),
+				auctionId,
+				price,
 				new Date());
 		Bidding savedBidding = biddingRepository.save(bidding);
 		auctionRepository.updateWinningBid(bidding.getPrice(), bidding.getAuctionId());
