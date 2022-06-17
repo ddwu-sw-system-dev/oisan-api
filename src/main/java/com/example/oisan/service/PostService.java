@@ -2,11 +2,16 @@ package com.example.oisan.service;
 
 import com.example.oisan.controller.PostCommand;
 import com.example.oisan.domain.Customer;
+import com.example.oisan.domain.Moodtag;
 import com.example.oisan.domain.Post;
 import com.example.oisan.repository.CustomerRepository;
 import com.example.oisan.domain.PostLike;
 import com.example.oisan.repository.PostLikeRepository;
+import com.example.oisan.domain.TagPost;
+import com.example.oisan.repository.MoodtagRepository;
 import com.example.oisan.repository.PostRepository;
+import com.example.oisan.repository.TagPostRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +23,18 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PostService {
+    
+    @Autowired
+    private TagPostRepository tagPostRepository;
+    public void setTagPostRepository(TagPostRepository tagPostRepository) {
+        this.tagPostRepository = tagPostRepository;
+    }
+    
+    @Autowired
+    private MoodtagRepository moodtagRepository;
+    public void setMoodtagRepository(MoodtagRepository moodtagRepository) {
+        this.moodtagRepository = moodtagRepository;
+    }
 
     private PostRepository postRepository;
     private PostLikeRepository postLikeRepository;
@@ -84,7 +101,7 @@ public class PostService {
     }
     
     public Post likePost(int postId, int customerId) {
-    	Post post = postRepository.findPostByPostId(postId);
+    	Post post = postRepository.findByPostId(postId);
     	if (this.checkIfLikePost(postId, customerId) == true) {
     		PostLike postLike = new PostLike();
     		postLike = postLikeRepository.findPostLikeByPostIdAndCustomerId(postId, customerId);
@@ -97,6 +114,41 @@ public class PostService {
     		postLikeRepository.save(newPostLike);
     	}
     	return post;
+    }
+    
+    public void saveTagPost(int moodtagId, int postId) {
+    	Moodtag moodtag = moodtagRepository.findByMoodtagId(moodtagId);
+    	Post post = postRepository.findByPostId(postId);
+    	tagPostRepository.save(new TagPost(moodtag, post));
+    }
+    
+    public Moodtag saveMoodtag(String name) {
+    	Moodtag moodtag = new Moodtag(name);
+    	return moodtagRepository.save(moodtag);
+    }
+    
+    public List<TagPost> findTagPostsByPostId(int postId) {
+    	return tagPostRepository.findByPostId(postId);
+    }
+    
+    public List<TagPost> findTagPostsByMoodtagId(int moodtagId) {
+    	return tagPostRepository.findByMoodtagMoodtagId(moodtagId);
+    }
+    
+    public Moodtag findByName(String name) {
+    	return moodtagRepository.findByName(name);
+    }
+    
+    public void deleteTagPost(int moodtagId, int postId) {
+//    	Moodtag moodtag = moodtagRepository.findByMoodtagId(moodtagId);
+//    	Post post = postRepository.findByPostId(postId);
+//    	tagPostRepository.delete(new TagPost(moodtag, post));
+    	int tagPostId = tagPostRepository.findByMoodtagIdAndByPostId(moodtagId, postId);
+    	tagPostRepository.deleteById(tagPostId);
+    }
+    
+    public int updateStatusByPostId(int status, int postId) {
+    	return postRepository.updateStatusByPostId(status, postId);
     }
 
 }

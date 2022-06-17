@@ -15,5 +15,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 		
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE CUSTOMER SET OI_PAY = ?1 WHERE CUSTOMER_ID = ?2", nativeQuery=true)
-	Customer updateOipayByCustomerId(int oiPay, int customerId);
+	int updateOipayByCustomerId(int oiPay, int customerId);
 }
