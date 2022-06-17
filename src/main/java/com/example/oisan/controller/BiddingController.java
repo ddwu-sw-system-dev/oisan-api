@@ -48,11 +48,11 @@ public class BiddingController {
 		this.oiPayUsageService = oiPayUsageService;
 	}
 	
-//	@GetMapping(value="/{auctionId}")
-//	public List<Bidding> getBiddingList(@PathVariable("auctionId") int auctionId, HttpServletResponse response) throws IOException {
-//		List<Bidding> biddingList = biddingService.getBiddings(auctionId);
-//		return biddingList;  // convert list of orders to JSON text in response body
-//	}
+	@GetMapping(value="/{auctionId}")
+	public List<Bidding> getBiddingList(@PathVariable("auctionId") int auctionId, HttpServletResponse response) throws IOException {
+		List<Bidding> biddingList = biddingService.getBiddingsByAuctionId(auctionId);
+		return biddingList;  // convert list of orders to JSON text in response body
+	}
 	
 	@GetMapping(value="/customer")
 	public List<Bidding> getBiddingListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
