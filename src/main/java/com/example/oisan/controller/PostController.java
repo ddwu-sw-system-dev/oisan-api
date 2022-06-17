@@ -23,11 +23,8 @@ public class PostController {
     }
 
     @PostMapping("/post/new")
-    public Post createPost(@RequestBody PostCommand postCom, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("Customer");
-
-        Post post = postService.save(postCom, customer);
+    public Post createPost(@RequestBody PostCommand postCom) {
+        Post post = postService.createPost(postCom);
         return post;
     }
 
@@ -50,38 +47,19 @@ public class PostController {
     }
 
     @GetMapping("/post/edit")
-    public Post editPost(@RequestParam("postId") int postId, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("Customer");
-
+    public Post editPost(@RequestParam("postId") int postId) {
         Post post = postService.findPost(postId).get();
-
-        if (!(customer.getCustomerId() == post.getCustomer().getCustomerId())) {
-            return null;
-        }
         return post;
     }
 
     @PutMapping("/post/edit")
-    public String updatePost(@RequestBody PostCommand postCom, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("Customer");
-
-        postService.save(postCom, customer);
+    public String updatePost(@RequestBody PostCommand postCom) {
+        postService.updatePost(postCom);
         return "redirect:/";
     }
 
     @DeleteMapping("/post/delete")
-    public String deletePost(@RequestParam("postId") int postId, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("Customer");
-
-        Post post = postService.findPost(postId).get();
-
-        if (!(customer.getCustomerId() == post.getCustomer().getCustomerId())) {
-            return null;
-        }
-
+    public String deletePost(@RequestParam("postId") int postId) {
         postService.deletePost(postId);
         return "redirect:/";
     }

@@ -4,6 +4,8 @@ import java.util.List;
 
 public class PostCommand {
 
+    private int postId;
+    private int customerId;
     private String title;
     private String desc;
     private String imageUrl;
@@ -13,6 +15,22 @@ public class PostCommand {
     private int categId;
     private List<String> tagList;
     private int price;
+
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
 
     public String getTitle() {
         return title;
@@ -85,5 +103,5 @@ public class PostCommand {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-    
+
 }

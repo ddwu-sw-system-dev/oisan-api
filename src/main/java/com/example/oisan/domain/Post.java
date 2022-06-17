@@ -4,8 +4,15 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name="POST")
+@SequenceGenerator(
+        name = "POST_SEQ_GENERATOR",
+        sequenceName = "POST_SEQ",
+        initialValue = 1,
+        allocationSize = 1
+)
 public class Post {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY, generator="POST_SEQ_GENERATOR")
     private int postId;
     @ManyToOne
 	@JoinColumn(name="CUSTOMER_ID")
