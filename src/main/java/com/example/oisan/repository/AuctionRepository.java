@@ -27,11 +27,11 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 	
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE AUCTION SET WINNING_BID = ?1 WHERE AUCTION_ID = ?2", nativeQuery=true)
-	Auction updateWinningBid(int price, int auctionId);
+	int updateWinningBid(int price, int auctionId);
 	
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE AUCTION SET STATUS = 0 WHERE CLOSING_TIME <= ?1", nativeQuery=true)
-	Auction closeAuction(Date curTime);
+	int closeAuction(Date curTime);
 	
 	List<Auction> findByTitleContaining(String word);
 	

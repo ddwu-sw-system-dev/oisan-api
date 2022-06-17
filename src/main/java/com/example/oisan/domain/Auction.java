@@ -24,7 +24,7 @@ import javax.persistence.Table;
 public class Auction {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="AUCTION_SEQ_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="AUCTION_GENERATOR")
 	private int auctionId;
 
 	@ManyToOne
