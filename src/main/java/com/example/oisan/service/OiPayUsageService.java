@@ -64,13 +64,7 @@ public class OiPayUsageService {
 		Date date = new Date();
 		int remain = 0;
 		
-//		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
 		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
-
-//		if (lastUsage != null) { // 마지막 사용내역이 있다면
-//			remain = lastUsage.getRemain();
-//		}
-		
 		remain = customer.getOiPay();
 		
 		if (amount > remain) {
