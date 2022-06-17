@@ -13,24 +13,39 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
+import com.example.oisan.service.AuctionService;
 import com.example.oisan.service.BiddingService;
+import com.example.oisan.service.OiPayUsageService;
 
 @RestController
 @RequestMapping("/bidding")
 @CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
 public class BiddingController {
-	private BiddingService biddingService;
+
+	@Autowired
+	private AuctionService auctionService;
+	public void setAuctionService(AuctionService auctionService) {
+		this.auctionService = auctionService;
+	}
 	
 	@Autowired
+	private BiddingService biddingService;
 	public void setBiddingService(BiddingService biddingService) {
 		this.biddingService = biddingService;
+	}
+
+	@Autowired
+	private OiPayUsageService oiPayUsageService;
+	public void setOiPayUsageService(OiPayUsageService oiPayUsageService) {
+		this.oiPayUsageService = oiPayUsageService;
 	}
 	
 	@GetMapping(value="/{auctionId}")
@@ -39,20 +54,29 @@ public class BiddingController {
 		return biddingList;  // convert list of orders to JSON text in response body
 	}
 	
-	@GetMapping(value="/customer/{customerId}")
-	public List<Bidding> getBiddingListByCustomerId(@PathVariable("customerId") int customerId, HttpServletResponse response) throws IOException {
-		List<Bidding> biddingList = biddingService.getBiddingsByCustomerId(customerId);
+	@GetMapping(value="/customer")
+	public List<Bidding> getBiddingListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		Customer customer = (Customer) session.getAttribute("Customer");
+		List<Bidding> biddingList = biddingService.getBiddingsByCustomerId(customer.getCustomerId());
 		return biddingList;
 	}
 
 	@PostMapping(value="/{auctionId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Bidding createBidding(@RequestBody BiddingCommand biddingCom, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Bidding createBidding(@PathVariable("auctionId") int auctionId, @RequestParam("price") int price, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 현재 로그인한 유저 가져와서 넣어야 함
 		HttpSession session = request.getSession();
 		Customer customer = (Customer) session.getAttribute("Customer");
+
+		// 입찰한 금액만큼 차감
+		Auction auction = auctionService.findAuctionById(auctionId);
+		Bidding bidding = biddingService.insertBidding(price, auctionId, customer.getCustomerId());
+		oiPayUsageService.useOiPay(auction.getCustomer().getCustomerId(), auction.getWinningBid(), auction.getAuctionId()); 
 		
-		Bidding bidding = biddingService.insertBidding(biddingCom, customer.getCustomerId());
+		// 직전 입찰 환불
+		Bidding lastBidding = biddingService.getLastBidding(auction.getAuctionId());
+		oiPayUsageService.chargeOiPay(lastBidding.getCustomerId(), lastBidding.getPrice());
 		
 		return bidding;
 	}

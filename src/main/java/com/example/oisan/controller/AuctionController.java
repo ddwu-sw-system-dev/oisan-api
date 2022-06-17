@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oisan.domain.Auction;
-import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.service.AuctionService;
-import com.example.oisan.service.BiddingService;
-import com.example.oisan.service.OiPayUsageService;
 
 @RestController
 @RequestMapping("/auction")
@@ -38,58 +35,6 @@ public class AuctionController {
 	public void setAuctionService(AuctionService auctionService) {
 		this.auctionService = auctionService;
 	}
-	
-	@Autowired
-	private BiddingService biddingService;
-	public void setBiddingService(BiddingService biddingService) {
-		this.biddingService = biddingService;
-	}
-
-	@Autowired
-	private OiPayUsageService oiPayUsageService;
-	public void setOiPayUsageService(OiPayUsageService oiPayUsageService) {
-		this.oiPayUsageService = oiPayUsageService;
-	}
-	
-//	@GetMapping(value="/list")
-//	public List<Auction> getAuctionList(HttpServletResponse response) throws IOException {
-//		List<Auction> auctionList = auctionService.getAuctions();
-//		if (auctionList == null) {
-//			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//			return null;
-//		}
-//		return auctionList;  // convert list of orders to JSON text in response body
-//	}
-	
-//	@GetMapping(value="/list/{categoryId}")
-//	public List<Auction> getAuctionListByCategory(@PathVariable("categoryId") String categoryId, HttpServletResponse response) throws IOException {
-//		List<Auction> auctionList = auctionService.getAuctionsByCategory(categoryId);
-//		if (auctionList == null) {
-//			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//			return null;
-//		}
-//		return auctionList;
-//	}
-//	
-//	@PostMapping(value="/list") // 사이즈 입력했는데 카테고리 선택 안 했을 때 
-//	public List<Auction> getAuctionListBySize(@RequestBody FurSizeCommand furSizeCom, HttpServletResponse response) throws IOException {
-//		List<Auction> auctionList = auctionService.getAuctionsBySize(furSizeCom);
-//		if (auctionList == null) {
-//			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//			return null;
-//		}
-//		return auctionList;
-//	}
-//
-//	@PostMapping(value="/list/{categoryId}") // 사이즈 입력했는데 카테고리 선택한 상태일 때
-//	public List<Auction> getAuctionListByCategoryAndSize(@PathVariable("categoryId") String categoryId, @RequestBody FurSizeCommand furSizeCom, HttpServletResponse response) throws IOException {
-//		List<Auction> auctionList = auctionService.getAuctionsByCategoryAndSize(categoryId, furSizeCom);
-//		if (auctionList == null) {
-//			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//			return null;
-//		}
-//		return auctionList;
-//	}
 	
 	@GetMapping(value="/list") 
 	public List<Auction> getAuctionList(@RequestParam("categoryId") int categoryId, @RequestParam("minWidth") int minWidth, @RequestParam("maxWidth") int maxWidth,
@@ -121,8 +66,8 @@ public class AuctionController {
 	}
 	
 	// 해당 유저가 낙찰받은 옥션 목록 조회
-	@GetMapping(value="/list/winning/{customerId}")
-	public List<Auction> getWinningAuctionListByCustomerId(@PathVariable("customerId") int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@GetMapping(value="/list/winning")
+	public List<Auction> getWinningAuctionListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 현재 로그인한 유저와 비교해서 일치하면 진행
 		HttpSession session = request.getSession();
 		Customer customer = (Customer) session.getAttribute("Customer");
@@ -154,13 +99,6 @@ public class AuctionController {
 		Customer customer = (Customer) session.getAttribute("Customer");
 		
 		Auction auction = auctionService.insertAuction(auctionCom, customer);
-		
-		// 입찰한 금액만큼 차감
-		oiPayUsageService.useOiPay(auction.getCategoryId(), auctionCom.getPrice(), auction.getAuctionId()); 
-		
-		// 직전 입찰 환불
-		Bidding lastBidding = biddingService.getLastBidding(auction.getAuctionId());
-		oiPayUsageService.chargeOiPay(lastBidding.getCustomerId(), lastBidding.getPrice());
 		
 		return auction;
 	}
