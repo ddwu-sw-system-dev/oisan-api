@@ -62,10 +62,8 @@ public class BiddingController {
 		return biddingList;
 	}
 
-	@GetMapping(value="/{auctionId}")
+	@PostMapping(value="/{auctionId}")
 	public Bidding createBidding(@PathVariable("auctionId") int auctionId, @RequestParam("price") int price, @RequestParam("customerId") int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
-//		Auction auction = auctionService.findAuctionById(auctionId);
-		
 		// 직전 입찰 환불
 		Bidding lastBidding = biddingService.getLastBidding(auctionId);
 		if (lastBidding != null)
