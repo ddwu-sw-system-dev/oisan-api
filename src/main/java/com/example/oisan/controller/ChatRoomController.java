@@ -62,5 +62,12 @@ public class ChatRoomController {
 		int id = Integer.parseInt(chatRoomId);
 		return chatRoomService.findChatRoomByChatRoomId(id);
 	}
+	
+	@GetMapping("/find/{customer1}/{customer2}")
+	public ChatRoom getChatRoomByCustomerId(@PathVariable String customer1, @PathVariable String customer2) {
+		int customer1Id = Integer.parseInt(customer1);
+		int customer2Id = Integer.parseInt(customer2);
+		return chatRoomService.findChatRoomByCustomerId(customer1Id, customer2Id);
+	}
 
 }
