@@ -48,11 +48,11 @@ public class BiddingController {
 		this.oiPayUsageService = oiPayUsageService;
 	}
 	
-	@GetMapping(value="/{auctionId}")
-	public List<Bidding> getBiddingList(@PathVariable("auctionId") int auctionId, HttpServletResponse response) throws IOException {
-		List<Bidding> biddingList = biddingService.getBiddings(auctionId);
-		return biddingList;  // convert list of orders to JSON text in response body
-	}
+//	@GetMapping(value="/{auctionId}")
+//	public List<Bidding> getBiddingList(@PathVariable("auctionId") int auctionId, HttpServletResponse response) throws IOException {
+//		List<Bidding> biddingList = biddingService.getBiddings(auctionId);
+//		return biddingList;  // convert list of orders to JSON text in response body
+//	}
 	
 	@GetMapping(value="/customer")
 	public List<Bidding> getBiddingListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -62,18 +62,18 @@ public class BiddingController {
 		return biddingList;
 	}
 
-	@PostMapping(value="/{auctionId}")
-	@ResponseStatus(HttpStatus.CREATED)
+	@GetMapping(value="/{auctionId}")
 	public Bidding createBidding(@PathVariable("auctionId") int auctionId, @RequestParam("price") int price, @RequestParam("customerId") int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		// 입찰한 금액만큼 차감
-		Auction auction = auctionService.findAuctionById(auctionId);
-		Bidding bidding = biddingService.insertBidding(price, auctionId, customerId);
-		oiPayUsageService.useOiPay(auction.getCustomer().getCustomerId(), auction.getWinningBid(), auction.getAuctionId()); 
+//		Auction auction = auctionService.findAuctionById(auctionId);
 		
 		// 직전 입찰 환불
-		Bidding lastBidding = biddingService.getLastBidding(auction.getAuctionId());
-		oiPayUsageService.chargeOiPay(lastBidding.getCustomerId(), lastBidding.getPrice());
+		Bidding lastBidding = biddingService.getLastBidding(auctionId);
+		if (lastBidding != null)
+			oiPayUsageService.chargeOiPay(lastBidding.getCustomerId(), lastBidding.getPrice());
+		
+		// 입찰한 금액만큼 차감
+		Bidding bidding = biddingService.insertBidding(price, auctionId, customerId);
+		oiPayUsageService.useOiPay(customerId, price, auctionId); 
 		
 		return bidding;
 	}

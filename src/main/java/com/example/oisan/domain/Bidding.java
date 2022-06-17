@@ -27,24 +27,27 @@ public class Bidding {
 	private int auctionId;
 	private int price;
 	private Date createAt;
+	private int winner;
 	
 	public Bidding() {}
 	
-	public Bidding(int biddingId, int customerId, int auctionId, int price, Date createAt) {
+	public Bidding(int customerId, int auctionId, int price, Date createAt, int winner) {
+		super();
+		this.customerId = customerId;
+		this.auctionId = auctionId;
+		this.price = price;
+		this.createAt = createAt;
+		this.winner = winner;
+	}
+
+	public Bidding(int biddingId, int customerId, int auctionId, int price, Date createAt, int winner) {
 		super();
 		this.biddingId = biddingId;
 		this.customerId = customerId;
 		this.auctionId = auctionId;
 		this.price = price;
 		this.createAt = createAt;
-	}
-	
-	public Bidding(int customerId, int auctionId, int price, Date createAt) {
-		super();
-		this.customerId = customerId;
-		this.auctionId = auctionId;
-		this.price = price;
-		this.createAt = createAt;
+		this.winner = winner;
 	}
 
 	public int getBiddingId() {
@@ -76,6 +79,18 @@ public class Bidding {
 	}
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+	public int getWinner() {
+		return winner;
+	}
+	public void setWinner(int winner) {
+		this.winner = winner;
+	}
+
+	@Override
+	public String toString() {
+		return "Bidding [biddingId=" + biddingId + ", customerId=" + customerId + ", auctionId=" + auctionId
+				+ ", price=" + price + ", createAt=" + createAt + ", winner=" + winner + "]";
 	}
 	
 }

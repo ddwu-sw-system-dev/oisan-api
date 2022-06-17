@@ -2,11 +2,13 @@ package com.example.oisan.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.OiPayUsage;
 import com.example.oisan.repository.OiPayUsageRepository;
 import com.example.oisan.repository.CustomerRepository;
@@ -63,11 +65,14 @@ public class OiPayUsageService {
 		Date date = new Date();
 		int remain = 0;
 		
-		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
+//		OiPayUsage lastUsage = oiPayUsageRepository.findTopByCustomerIdOrderByOiPayIdDesc(customerId);
+		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
 
-		if (lastUsage != null) { // 마지막 사용내역이 있다면
-			remain = lastUsage.getRemain();
-		}
+//		if (lastUsage != null) { // 마지막 사용내역이 있다면
+//			remain = lastUsage.getRemain();
+//		}
+		
+		remain = customer.getOiPay();
 		
 		if (amount > remain) {
 			//잔액보다 사용하고자 하는 양이 크면 예외 처리해야됨
