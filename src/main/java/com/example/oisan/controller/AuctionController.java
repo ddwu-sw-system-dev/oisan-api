@@ -97,8 +97,8 @@ public class AuctionController {
 	}
 	
 	@PutMapping("/{auctionId}")
-	public Auction updateAuction(@PathVariable("auctionId") int auctionId, 
-			AuctionCommand auctionCom, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Auction updateAuction(@RequestBody AuctionCommand auctionCom, @PathVariable("auctionId") int auctionId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println(auctionCom);
 		Auction auction = auctionService.findAuctionById(auctionId);
 		if (auction == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
