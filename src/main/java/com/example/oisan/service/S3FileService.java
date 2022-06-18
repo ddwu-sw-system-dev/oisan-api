@@ -33,7 +33,7 @@ public class S3FileService {
     }
     
     public void deleteFile(String fileName, String folderName) {
-    	DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, folderName + fileName);
+    	DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, folderName+fileName);
     	amazonS3Client.deleteObject(deleteObjectRequest);
     }
 

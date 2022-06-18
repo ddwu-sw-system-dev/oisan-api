@@ -15,6 +15,7 @@ import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Furniture;
+import com.example.oisan.domain.Post;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
 import com.example.oisan.repository.CustomerRepository;
@@ -92,6 +93,7 @@ public class AuctionService {
 		String image_url = null;
 		try {
 			image_url = s3FileService.upload(auctionCom.getImage(), "auction/");
+			image_url = "auction/"+image_url;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -153,6 +155,9 @@ public class AuctionService {
 	}
 
 	public void deleteAuction(int auctionId) {
+		Auction auction = auctionRepository.findByAuctionId(auctionId);
+    	String image_url = auction.getImageUrl();
+    	s3FileService.deleteFile(image_url, "auction/");
 		auctionRepository.deleteById(auctionId);
 	}
 	

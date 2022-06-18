@@ -71,6 +71,7 @@ public class PostService {
         String image_url = null;
 		try {
 			image_url = s3FileService.upload(postCom.getImage(), "post/");
+			image_url = "post/"+image_url;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
