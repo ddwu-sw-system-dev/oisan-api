@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.oisan.domain.Customer;
+import com.example.oisan.domain.Post;
 import com.example.oisan.service.CustomerService;
 
 @RestController
@@ -56,4 +57,9 @@ public class CustomerController {
 		return customerService.getCustomers();
 	}
 
+	@GetMapping("/likepost/list")
+	public List<Post> customerLikePostList(@RequestParam String customerId){
+		int c_id = Integer.parseInt(customerId);
+		return customerService.getCustomerLikePostList(c_id);
+	}
 }

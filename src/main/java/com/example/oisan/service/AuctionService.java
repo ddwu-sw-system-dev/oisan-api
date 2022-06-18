@@ -108,17 +108,9 @@ public class AuctionService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Auction auction = new Auction(
-				customer,
-				auctionCom.getPrice(),
-				auctionCom.getPrice(),
-				date,
-				calendar.getTime(),
-				1,
-				auctionCom.getTitle(),
-				image_url,
-				auctionCom.getCategId(),
-				auctionCom.getDesc(),
+		Auction auction = new Auction(customer, auctionCom.getPrice(), auctionCom.getPrice(),
+				date, calendar.getTime(), 1, auctionCom.getTitle(), image_url,
+				auctionCom.getCategId(), auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
 		return auctionRepository.save(auction);
 	}
