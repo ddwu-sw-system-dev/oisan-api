@@ -1,5 +1,6 @@
 package com.example.oisan.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.oisan.controller.CustomerCommand;
@@ -8,11 +9,19 @@ import org.springframework.stereotype.Service;
 
 import com.example.oisan.controller.CustomerUpdateCommand;
 import com.example.oisan.domain.Customer;
+import com.example.oisan.domain.Post;
 import com.example.oisan.repository.CustomerRepository;
+import com.example.oisan.repository.PostRepository;
 
 
 @Service
 public class CustomerService {
+	
+	@Autowired
+	private PostRepository postRepository;
+	public void setPostRepository(PostRepository postRepository) {
+		this.postRepository = postRepository;
+	}
 	
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -20,12 +29,7 @@ public class CustomerService {
 		this.customerRepository = customerRepository;
 	}
 	
-//	private Map<Integer, Customer> customerMap = new HashMap<Integer, Customer>();
-
-	public CustomerService() {
-//		customerMap.put(0, new Customer(0, "test1","testaa@gmail.com","123123","seoul","010-123-1234","testnick"));
-//		customerMap.put(1, new Customer(1, "test2","test2@gmail.com","123123","seoul","010-123-1224","tes12nick"));
-	}
+	public CustomerService() {}
 	
 	public List<Customer> getCustomers(){
 		return customerRepository.findAll();
@@ -50,7 +54,6 @@ public class CustomerService {
 		customer.setAddress(CustomerCom.getAddress());
 		customer.setPhone(CustomerCom.getPhone());
 		customer.setNickname(CustomerCom.getNickname());
-//		customer.setOiPay(CustomerCom.getOiPay());
 		return customerRepository.save(customer);
 	}
 	
@@ -67,28 +70,16 @@ public class CustomerService {
 	}
 	
 	public Customer loginCustomer(String email, String pw) {
-//		if (loginCustomer.getEmail() == null || loginCustomer.getPw() == null)
-//			return null; //empty form
-//		Customer customer = getCustomerInfoByEmail(loginCustomer.getEmail());
-//		if (customer == null)
-//			return null; //customer not exist
-//		if (!customer.getPw().equals(loginCustomer.getPw()))
-//			return null; //password not match
 		return customerRepository.findCustomerByEmail(email);
 	}
 	
-//	public CustomerCreateCommand modifyCustomerInfo(CustomerModRequest modReq) { //CustomerModRequest 혜준이가 만들어줌
-//		CustomerCreateCommand customer = customerMap.get(modReq.getCustomerCustomerId()); // request에서 getCustomerCustomerId로 만들어줘야함
-//		if (customer == null)
-//			throw new CustomerNotFoundException(); //생성해줘야함
-//	
-//		customer.setEmail(modReq.getEmail());
-//		customer.setCustomerName(modReq.getCustomerName());
-//		customer.setPw(modReq.getPw());
-//		customer.setAddress(modReq.getAddress());
-//		customer.setPhone(modReq.getPhone());
-//		customer.setNickname(modReq.getNickname());
-//		return customer;
-//	}
-
+	public List<Post> getCustomerLikePostList(int customerId){
+		List<Integer> postIdList = customerRepository.findLikePostByCustomerId(customerId);
+		List<Post> likePostList = new ArrayList<Post>();
+		for (Integer pId : postIdList) {
+			likePostList.add(postRepository.findByPostId(pId));
+		}
+		return likePostList;
+	}
+	
 }
