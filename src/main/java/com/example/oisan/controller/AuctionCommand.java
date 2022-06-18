@@ -3,6 +3,7 @@ package com.example.oisan.controller;
 import org.springframework.web.multipart.MultipartFile;
 
 public class AuctionCommand {
+	private int auctionId;
 	private String title;
 	private String desc;
 	private MultipartFile image;
@@ -76,9 +77,17 @@ public class AuctionCommand {
 		this.price = price;
 	}
 	
+	public int getAuctionId() {
+		return auctionId;
+	}
+
+	public void setAuctionId(int auctionId) {
+		this.auctionId = auctionId;
+	}
+
 	@Override
 	public String toString() {
-		return "AuctionCommand [title=" + title + ", desc=" + desc + ", imageUrl=" + image + ", categoryId="
+		return "AuctionCommand [auctionId= " + auctionId + ", title=" + title + ", desc=" + desc + ", imageUrl=" + image + ", categoryId="
 				+ categId + ", width=" + width + ", depth=" + depth + ", height=" + height + ", price=" + price
 				+ "]";
 	}
