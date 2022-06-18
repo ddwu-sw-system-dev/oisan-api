@@ -29,6 +29,14 @@ public class PostController {
     @PostMapping("/post/new")
     public Post createPost(PostCommand postCom) {
         Post post = postService.createPost(postCom);
+        
+        for (String s : postCom.getTagList()) {
+        	Moodtag moodtag = postService.findByName(s.trim());
+        	if (moodtag == null) {
+        		moodtag = postService.saveMoodtag(s.trim());
+        	}
+        	postService.saveTagPost(moodtag.getMoodtagId(), post.getPostId());
+        }
         return post;
     }
 
@@ -103,21 +111,6 @@ public class PostController {
             }
         }
     	return postList;
-    }
-
-    @SuppressWarnings("null")
-    @GetMapping("/post/tag/create") // request에 tags는 ","으로 연결된 태그들 // 글 쓸 때 호출하고, 이후 수정(추가)할 때 호출하면 될 듯
-    public Post createTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
-        String[] tagList = tags.split(",");
-
-        for (String s : tagList) {
-        	Moodtag moodtag = postService.findByName(s.trim());
-        	if (moodtag == null) {
-        		moodtag = postService.saveMoodtag(s.trim());
-        	}
-        	postService.saveTagPost(moodtag.getMoodtagId(), postId);
-        }
-        return postService.findPost(postId).get();
     }
     
     @GetMapping("/post/tag/delete")
