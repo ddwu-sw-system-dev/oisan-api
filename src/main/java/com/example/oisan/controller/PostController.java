@@ -106,7 +106,7 @@ public class PostController {
     	return postList;
     }
     
-    @GetMapping("/post/tag/delete")
+    @DeleteMapping("/post/tag/delete")
     public Post deleteTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
         String[] tagList = tags.split(",");
 
