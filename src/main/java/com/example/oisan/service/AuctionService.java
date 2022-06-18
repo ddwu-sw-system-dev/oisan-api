@@ -134,22 +134,29 @@ public class AuctionService {
 	}
 	
 	public Auction updateAuction(int auctionId, AuctionCommand auctionCom) {
-//		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
-//		Auction auction = new Auction(
-//				auctionId,
-//				curAuction.getCustomer(),
-//				curAuction.getStartBid(),
-//				auctionCom.getPrice(),
-//				curAuction.getCreateAt(),
-//				curAuction.getClosingTime(),
-//				curAuction.getStatus(),
-//				auctionCom.getTitle(),
-//				auctionCom.getDesc(),
-//				auctionCom.getCategoryId(),
-//				auctionCom.getImageUrl(),
-//				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
-//		return auctionRepository.save(auction);
-		return null;		
+		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
+		String image_url = null;
+		try {
+			image_url = s3FileService.upload(auctionCom.getImage(), "auction/");
+			s3FileService.deleteFile(image_url, "auction/");
+			image_url = "auction/"+image_url;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Auction auction = new Auction(
+				auctionId,
+				curAuction.getCustomer(),
+				curAuction.getStartBid(),
+				auctionCom.getPrice(),
+				curAuction.getCreateAt(),
+				curAuction.getClosingTime(),
+				curAuction.getStatus(),
+				auctionCom.getTitle(),
+				image_url,
+				auctionCom.getCategId(),
+				auctionCom.getDesc(),
+				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
+		return auctionRepository.save(auction);
 	}
 
 	public void deleteAuction(int auctionId) {

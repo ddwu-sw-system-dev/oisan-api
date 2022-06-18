@@ -58,7 +58,7 @@ public class PostController {
     }
 
     @PutMapping("/post/edit")
-    public String updatePost(@RequestBody PostCommand postCom) {
+    public String updatePost(PostCommand postCom) {
         postService.updatePost(postCom);
         return "redirect:/";
     }

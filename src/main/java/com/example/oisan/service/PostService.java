@@ -81,12 +81,18 @@ public class PostService {
     }
 
     public Post updatePost(PostCommand postCom) {
-//        Customer customer = customerRepository.findCustomerByCustomerId(postCom.getCustomerId());
-//
-//        Post post = new Post(postCom.getPostId(), customer, postCom.getCategId(), new Date(), postCom.getTitle(),
-//                postCom.getDesc(), postCom.getImageUrl(), postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
-//        return postRepository.save(post);
-    	return null;
+        Customer customer = customerRepository.findCustomerByCustomerId(postCom.getCustomerId());
+        String image_url = null;
+		try {
+			image_url = s3FileService.upload(postCom.getImage(), "post/");
+			s3FileService.deleteFile(image_url, "post/");
+			image_url = "post/"+image_url;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        Post post = new Post(postCom.getPostId(), customer, postCom.getCategId(), new Date(), postCom.getTitle(),
+                postCom.getDesc(), image_url, postCom.getWidth(), postCom.getHeight(), postCom.getDepth(), 1, postCom.getPrice());
+        return postRepository.save(post);
     }
 
     public List<Post> findPosts() {
