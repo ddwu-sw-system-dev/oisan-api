@@ -133,23 +133,22 @@ public class AuctionService {
 	}
 	
 	public Auction updateAuction(int auctionId, AuctionCommand auctionCom) {
-//		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
-//		Auction auction = new Auction(
-//				auctionId,
-//				curAuction.getCustomer(),
-//				curAuction.getStartBid(),
-//				auctionCom.getPrice(),
-//				curAuction.getCreateAt(),
-//				curAuction.getClosingTime(),
-//				curAuction.getStatus(),
-//				auctionCom.getTitle(),
-//				auctionCom.getDesc(),
-//				auctionCom.getCategoryId(),
-//				auctionCom.getImageUrl(),
-//				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
-//		return auctionRepository.save(auction);
-		return null;
-		
+		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
+// 		Auction auction = new Auction(
+// 				auctionId,
+// 				curAuction.getCustomer(),
+// 				curAuction.getStartBid(),
+// 				auctionCom.getPrice(),
+// 				curAuction.getCreateAt(),
+// 				curAuction.getClosingTime(),
+// 				curAuction.getStatus(),
+// 				auctionCom.getTitle(),
+// 				auctionCom.getImageUrl(),
+// 				auctionCom.getCategoryId(),
+// 				auctionCom.getDesc(),
+// 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
+// 		return auctionRepository.save(auction);
+    return null;
 	}
 
 	public void deleteAuction(int auctionId) {
