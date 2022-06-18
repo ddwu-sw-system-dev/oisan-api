@@ -58,12 +58,6 @@ public class PostController {
         return post;
     }
 
-    @GetMapping("/post/edit")
-    public Post editPost(@RequestParam("postId") int postId) {
-        Post post = postService.findPost(postId).get();
-        return post;
-    }
-
     @PutMapping("/post/edit")
     public String updatePost(@RequestBody PostCommand postCom) {
         postService.updatePost(postCom);
@@ -85,14 +79,14 @@ public class PostController {
     
     @SuppressWarnings("null")
 	@GetMapping("/post/tag/list") // post에 포함된 tag list
-    public List<String> findTagPostsByPostId(@RequestParam("postId") int postId) {
-        List<String> tagList = null;
+    public List<Moodtag> findTagPostsByPostId(@RequestParam("postId") int postId) {
+        List<Moodtag> tagList = null;
         List<TagPost> tagPostList = postService.findTagPostsByPostId(postId);
 
         if (tagPostList != null) {
         	tagList = new ArrayList<>();
             for (TagPost t : tagPostList) {
-            	tagList.add(t.getMoodtag().getName());
+            	tagList.add(t.getMoodtag());
             }
         }
         return tagList;
