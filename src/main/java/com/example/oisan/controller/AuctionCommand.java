@@ -1,10 +1,12 @@
 package com.example.oisan.controller;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class AuctionCommand {
 	private String title;
 	private String desc;
-	private String imageUrl;
-	private int categoryId;
+	private MultipartFile image;
+	private int categId;
 	private int width;
 	private int depth;
 	private int height;
@@ -26,20 +28,20 @@ public class AuctionCommand {
 		this.desc = desc;
 	}
 	
-	public String getImageUrl() {
-		return imageUrl;
+	public MultipartFile getImage() {
+		return image;
 	}
 	
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImage(MultipartFile image) {
+		this.image = image;
 	}
 	
-	public int getCategoryId() {
-		return categoryId;
+	public int getCategId() {
+		return categId;
 	}
 	
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setCategId(int categId) {
+		this.categId = categId;
 	}
 	
 	public int getWidth() {
@@ -76,8 +78,8 @@ public class AuctionCommand {
 	
 	@Override
 	public String toString() {
-		return "AuctionCommand [title=" + title + ", desc=" + desc + ", imageUrl=" + imageUrl + ", categoryId="
-				+ categoryId + ", width=" + width + ", depth=" + depth + ", height=" + height + ", price=" + price
+		return "AuctionCommand [title=" + title + ", desc=" + desc + ", imageUrl=" + image + ", categoryId="
+				+ categId + ", width=" + width + ", depth=" + depth + ", height=" + height + ", price=" + price
 				+ "]";
 	}
 	

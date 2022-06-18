@@ -34,7 +34,7 @@ public class AuctionController {
 		this.auctionService = auctionService;
 	}
 	
-	@GetMapping(value="/list") 
+	@GetMapping("/list") 
 	public List<Auction> getAuctionList(@RequestParam("categoryId") int categoryId, @RequestParam("minWidth") int minWidth, @RequestParam("maxWidth") int maxWidth,
 			@RequestParam("minDepth") int minDepth, @RequestParam("maxDepth") int maxDepth, @RequestParam("minHeight") int minHeight, @RequestParam("maxHeight") int maxHeight, HttpServletResponse response) throws IOException {
 		List<Auction> auctionList = null;
@@ -58,13 +58,13 @@ public class AuctionController {
 	}
 	
 	// 카테고리 이름 조회
-	@GetMapping(value="/category/{categId}")
+	@GetMapping("/category/{categId}")
 	public String getCategoryName(@PathVariable("categId") int categId, HttpServletResponse response) throws IOException {
 		return auctionService.getCategoryName(categId);
 	}
 	
 	// 해당 유저가 낙찰받은 옥션 목록 조회
-	@GetMapping(value="/list/winning")
+	@GetMapping("/list/winning")
 	public List<Auction> getWinningAuctionListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 현재 로그인한 유저와 비교해서 일치하면 진행
 		HttpSession session = request.getSession();
@@ -79,7 +79,7 @@ public class AuctionController {
 		return auctionList;
 	}
 	
-	@GetMapping(value="/{auctionId}") // auction 하나의 상세 페이지를 띄움
+	@GetMapping("/{auctionId}") // auction 하나의 상세 페이지를 띄움
 	public Auction getAuction(@PathVariable("auctionId") int auctionId, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.findAuctionById(auctionId);
 		if (auction == null) {
@@ -89,14 +89,14 @@ public class AuctionController {
 		return auction;
 	}
 	
-	@PostMapping(value="/create")
-	public Auction createAuction(@RequestBody AuctionCommand auctionCom, @RequestParam int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@PostMapping("/create")
+	public Auction createAuction(AuctionCommand auctionCom, @RequestParam int customerId, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.insertAuction(auctionCom, customerId);
 		auctionService.makeTaskScheduler(auction.getAuctionId());
 		return auction;
 	}
 	
-	@PutMapping(value = "/{auctionId}")
+	@PutMapping("/{auctionId}")
 	public Auction updateAuction(@PathVariable("auctionId") int auctionId, 
 			@RequestBody AuctionCommand auctionCom, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.findAuctionById(auctionId);
@@ -108,7 +108,7 @@ public class AuctionController {
 		return updatedAuction;
 	}
 	
-	@DeleteMapping(value="/{auctionId}")
+	@DeleteMapping("/{auctionId}")
 	public void deleteAuction(@PathVariable("auctionId") int auctionId, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Auction auction = auctionService.findAuctionById(auctionId);
 		if (auction == null) {

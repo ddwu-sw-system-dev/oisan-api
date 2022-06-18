@@ -1,5 +1,6 @@
 package com.example.oisan.service;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,12 @@ import com.example.oisan.repository.CustomerRepository;
 
 @Service
 public class AuctionService {
+	
+	@Autowired
+	private S3FileService s3FileService;
+	public void setS3FileService(S3FileService s3FileService) {
+        this.s3FileService = s3FileService;
+    }
 	
 	@Autowired
 	private AuctionRepository auctionRepository;
@@ -82,7 +89,12 @@ public class AuctionService {
 		calendar.add(Calendar.DATE, 1); // 하루 뒤에 마감
 		
 		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
-		
+		String image_url = null;
+		try {
+			image_url = s3FileService.upload(auctionCom.getImage(), "auction/");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Auction auction = new Auction(
 				customer,
 				auctionCom.getPrice(),
@@ -91,9 +103,9 @@ public class AuctionService {
 				calendar.getTime(),
 				1,
 				auctionCom.getTitle(),
+				image_url,
+				auctionCom.getCategId(),
 				auctionCom.getDesc(),
-				auctionCom.getCategoryId(),
-				auctionCom.getImageUrl(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
 		
 		return auctionRepository.save(auction);
@@ -121,21 +133,22 @@ public class AuctionService {
 	}
 	
 	public Auction updateAuction(int auctionId, AuctionCommand auctionCom) {
-		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
-		Auction auction = new Auction(
-				auctionId,
-				curAuction.getCustomer(),
-				curAuction.getStartBid(),
-				auctionCom.getPrice(),
-				curAuction.getCreateAt(),
-				curAuction.getClosingTime(),
-				curAuction.getStatus(),
-				auctionCom.getTitle(),
-				auctionCom.getDesc(),
-				auctionCom.getCategoryId(),
-				auctionCom.getImageUrl(),
-				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
-		return auctionRepository.save(auction);
+//		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
+//		Auction auction = new Auction(
+//				auctionId,
+//				curAuction.getCustomer(),
+//				curAuction.getStartBid(),
+//				auctionCom.getPrice(),
+//				curAuction.getCreateAt(),
+//				curAuction.getClosingTime(),
+//				curAuction.getStatus(),
+//				auctionCom.getTitle(),
+//				auctionCom.getDesc(),
+//				auctionCom.getCategoryId(),
+//				auctionCom.getImageUrl(),
+//				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
+//		return auctionRepository.save(auction);
+		return null;
 		
 	}
 
