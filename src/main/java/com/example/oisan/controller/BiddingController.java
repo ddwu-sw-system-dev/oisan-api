@@ -8,20 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
-import com.example.oisan.service.AuctionService;
 import com.example.oisan.service.BiddingService;
 import com.example.oisan.service.OiPayUsageService;
 
@@ -29,12 +25,6 @@ import com.example.oisan.service.OiPayUsageService;
 @RequestMapping("/bidding")
 @CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
 public class BiddingController {
-
-	@Autowired
-	private AuctionService auctionService;
-	public void setAuctionService(AuctionService auctionService) {
-		this.auctionService = auctionService;
-	}
 	
 	@Autowired
 	private BiddingService biddingService;

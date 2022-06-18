@@ -1,6 +1,7 @@
 package com.example.oisan.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,6 @@ import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Furniture;
-import com.example.oisan.domain.Post;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
 import com.example.oisan.repository.CustomerRepository;
@@ -78,8 +78,19 @@ public class AuctionService {
 		return auctionRepository.findCategoryName(categId);
 	}
 	
-	public List<Auction> getWinningAuctionListByCustomer(Customer customer) {
+	public List<Auction> getClosedAuctionListByCustomerId(int customerId) {
+		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
 		return auctionRepository.findByCustomerAndStatus(customer, 0);
+	}
+	
+	public List<Auction> getWinningAuctionListByCustomerId(int customerId, int winner) {
+		List<Bidding> biddingList = biddingRepository.findByCustomerIdAndWinner(customerId, winner);
+		System.out.println(biddingList.toString());
+		List<Auction> auctionList = new ArrayList<>();
+		for (Bidding b : biddingList) {
+			auctionList.add(auctionRepository.findByAuctionId(b.getAuctionId()));
+		}
+		return auctionList;
 	}
 	
 	public Auction insertAuction(AuctionCommand auctionCom, int customerId) {
