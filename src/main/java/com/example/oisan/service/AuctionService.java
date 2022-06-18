@@ -87,7 +87,7 @@ public class AuctionService {
 		Date date = new Date();	
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 1); // 하루 뒤에 마감
+		calendar.add(Calendar.MINUTE, 3); // test-3분, 하루 뒤에 마감
 		
 		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
 		String image_url = null;
@@ -129,7 +129,7 @@ public class AuctionService {
 		Date date = new Date();	
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.add(Calendar.DATE, 1);
+		calendar.add(Calendar.MINUTE, 3); //test
 		scheduler.schedule(updateTableRunner, calendar.getTime());
 	}
 	
