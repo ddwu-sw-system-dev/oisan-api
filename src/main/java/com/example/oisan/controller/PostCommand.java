@@ -106,4 +106,12 @@ public class PostCommand {
 		this.price = price;
 	}
 
+	@Override
+	public String toString() {
+		return "PostCommand [postId=" + postId + ", customerId=" + customerId + ", title=" + title + ", desc=" + desc
+				+ ", image=" + image + ", width=" + width + ", height=" + height + ", depth=" + depth + ", categId="
+				+ categId + ", tagList=" + tagList + ", price=" + price + "]";
+	}
+	
+
 }
