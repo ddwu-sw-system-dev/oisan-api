@@ -1,6 +1,7 @@
 package com.example.oisan.service;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class S3FileUploadService {
+public class S3FileService {
 
     // 버킷 이름 동적 할당
     @Value("${cloud.aws.s3.bucket}")
@@ -27,11 +28,16 @@ public class S3FileUploadService {
 
     private final AmazonS3Client amazonS3Client;
 
-    public S3FileUploadService(AmazonS3Client amazonS3Client) {
+    public S3FileService(AmazonS3Client amazonS3Client) {
         this.amazonS3Client = amazonS3Client;
     }
+    
+    public void deleteFile(String fileName, String folderName) {
+    	DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, folderName+fileName);
+    	amazonS3Client.deleteObject(deleteObjectRequest);
+    }
 
-    public String upload(MultipartFile uploadFile) throws IOException {
+    public String upload(MultipartFile uploadFile, String folderName) throws IOException {
         String origName = uploadFile.getOriginalFilename();
         String url;
         try {
@@ -45,7 +51,7 @@ public class S3FileUploadService {
             // 파일 변환
             uploadFile.transferTo(file);
             // S3 파일 업로드
-            uploadOnS3(saveFileName, file);
+            uploadOnS3(saveFileName, file, folderName);
             // 주소 할당
             url = saveFileName;
             // 파일 삭제
@@ -60,11 +66,11 @@ public class S3FileUploadService {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    private void uploadOnS3(final String findName, final File file) {
+    private void uploadOnS3(final String findName, final File file, String folderName) {
         // AWS S3 전송 객체 생성
         final TransferManager transferManager = new TransferManager(this.amazonS3Client);
         // 요청 객체 생성
-        final PutObjectRequest request = new PutObjectRequest(bucket, "post/" + findName, file);
+        final PutObjectRequest request = new PutObjectRequest(bucket, folderName + findName, file);
         // 업로드 시도
         final Upload upload =  transferManager.upload(request);
 

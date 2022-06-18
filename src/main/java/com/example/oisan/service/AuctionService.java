@@ -1,5 +1,6 @@
 package com.example.oisan.service;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,12 +15,19 @@ import com.example.oisan.domain.Auction;
 import com.example.oisan.domain.Bidding;
 import com.example.oisan.domain.Customer;
 import com.example.oisan.domain.Furniture;
+import com.example.oisan.domain.Post;
 import com.example.oisan.repository.AuctionRepository;
 import com.example.oisan.repository.BiddingRepository;
 import com.example.oisan.repository.CustomerRepository;
 
 @Service
 public class AuctionService {
+	
+	@Autowired
+	private S3FileService s3FileService;
+	public void setS3FileService(S3FileService s3FileService) {
+        this.s3FileService = s3FileService;
+    }
 	
 	@Autowired
 	private AuctionRepository auctionRepository;
@@ -82,7 +90,13 @@ public class AuctionService {
 		calendar.add(Calendar.DATE, 1); // 하루 뒤에 마감
 		
 		Customer customer = customerRepository.findCustomerByCustomerId(customerId);
-		
+		String image_url = null;
+		try {
+			image_url = s3FileService.upload(auctionCom.getImage(), "auction/");
+			image_url = "auction/"+image_url;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Auction auction = new Auction(
 				customer,
 				auctionCom.getPrice(),
@@ -91,11 +105,10 @@ public class AuctionService {
 				calendar.getTime(),
 				1,
 				auctionCom.getTitle(),
-				auctionCom.getImageUrl(),
-				auctionCom.getCategoryId(),
+				image_url,
+				auctionCom.getCategId(),
 				auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
-		
 		return auctionRepository.save(auction);
 	}
 	
@@ -122,6 +135,14 @@ public class AuctionService {
 	
 	public Auction updateAuction(int auctionId, AuctionCommand auctionCom) {
 		Auction curAuction = auctionRepository.findByAuctionId(auctionId);
+		String image_url = null;
+		try {
+			image_url = s3FileService.upload(auctionCom.getImage(), "auction/");
+			s3FileService.deleteFile(image_url, "auction/");
+			image_url = "auction/"+image_url;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Auction auction = new Auction(
 				auctionId,
 				curAuction.getCustomer(),
@@ -131,15 +152,17 @@ public class AuctionService {
 				curAuction.getClosingTime(),
 				curAuction.getStatus(),
 				auctionCom.getTitle(),
-				auctionCom.getImageUrl(),
-				auctionCom.getCategoryId(),
+				image_url,
+				auctionCom.getCategId(),
 				auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
 		return auctionRepository.save(auction);
-		
 	}
 
 	public void deleteAuction(int auctionId) {
+		Auction auction = auctionRepository.findByAuctionId(auctionId);
+    	String image_url = auction.getImageUrl();
+    	s3FileService.deleteFile(image_url, "auction/");
 		auctionRepository.deleteById(auctionId);
 	}
 	
