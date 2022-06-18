@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,13 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oisan.domain.Auction;
-import com.example.oisan.domain.Customer;
 import com.example.oisan.service.AuctionService;
 
 @RestController
@@ -63,19 +60,17 @@ public class AuctionController {
 		return auctionService.getCategoryName(categId);
 	}
 	
-	// 해당 유저가 낙찰받은 옥션 목록 조회
+	// 해당 유저가 올린 경매 중 종료된 경매 목록 조회
+	@GetMapping("/list/closed")
+	public List<Auction> getClosedAuctionListByCustomer(@RequestParam int customerId) throws IOException {
+		List<Auction> auctionList = auctionService.getClosedAuctionListByCustomerId(customerId);
+		return auctionList;
+	}
+	
+	// 해당 유저가 낙찰받은 경매 목록 조회
 	@GetMapping("/list/winning")
-	public List<Auction> getWinningAuctionListByCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 현재 로그인한 유저와 비교해서 일치하면 진행
-		HttpSession session = request.getSession();
-		Customer customer = (Customer) session.getAttribute("Customer");
-		
-		//일치하는지 확인
-		if (!(customer.getCustomerId() == customer.getCustomerId())) {
-			return null;
-		}
-		
-		List<Auction> auctionList = auctionService.getWinningAuctionListByCustomer(customer);
+	public List<Auction> getWinningAuctionListByCustomer(@RequestParam int customerId) throws IOException {
+		List<Auction> auctionList = auctionService.getWinningAuctionListByCustomerId(customerId, 1);
 		return auctionList;
 	}
 	

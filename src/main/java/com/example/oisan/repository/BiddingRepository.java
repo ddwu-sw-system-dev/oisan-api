@@ -1,7 +1,6 @@
 package com.example.oisan.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +16,8 @@ public interface BiddingRepository extends JpaRepository<Bidding, Integer> {
 	List<Bidding> findByAuctionIdOrderByBiddingIdDesc(int auctionId);
 	
 	List<Bidding> findByCustomerId(int customerId);
+	
+	List<Bidding> findByCustomerIdAndWinner(int customerId, int winner);
 
 	@Transactional
 	@Modifying(clearAutomatically = true)
