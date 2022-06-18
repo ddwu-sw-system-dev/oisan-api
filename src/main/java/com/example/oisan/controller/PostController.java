@@ -28,6 +28,14 @@ public class PostController {
     @PostMapping("/post/new")
     public Post createPost(PostCommand postCom) {
         Post post = postService.createPost(postCom);
+        
+        for (String s : postCom.getTagList()) {
+        	Moodtag moodtag = postService.findByName(s.trim());
+        	if (moodtag == null) {
+        		moodtag = postService.saveMoodtag(s.trim());
+        	}
+        	postService.saveTagPost(moodtag.getMoodtagId(), post.getPostId());
+        }
         return post;
     }
 
@@ -45,12 +53,6 @@ public class PostController {
 
     @GetMapping("/post")
     public Post getPost(@RequestParam("postId") int postId) {
-        Post post = postService.findPost(postId).get();
-        return post;
-    }
-
-    @GetMapping("/post/edit")
-    public Post editPost(@RequestParam("postId") int postId) {
         Post post = postService.findPost(postId).get();
         return post;
     }
@@ -76,14 +78,14 @@ public class PostController {
     
     @SuppressWarnings("null")
 	@GetMapping("/post/tag/list") // post에 포함된 tag list
-    public List<String> findTagPostsByPostId(@RequestParam("postId") int postId) {
-        List<String> tagList = null;
+    public List<Moodtag> findTagPostsByPostId(@RequestParam("postId") int postId) {
+        List<Moodtag> tagList = null;
         List<TagPost> tagPostList = postService.findTagPostsByPostId(postId);
 
         if (tagPostList != null) {
         	tagList = new ArrayList<>();
             for (TagPost t : tagPostList) {
-            	tagList.add(t.getMoodtag().getName());
+            	tagList.add(t.getMoodtag());
             }
         }
         return tagList;
@@ -103,21 +105,6 @@ public class PostController {
         }
     	return postList;
     }
-
-    @SuppressWarnings("null")
-    @GetMapping("/post/tag/create") // request에 tags는 ","으로 연결된 태그들 // 글 쓸 때 호출하고, 이후 수정(추가)할 때 호출하면 될 듯
-    public Post createTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
-        String[] tagList = tags.split(",");
-
-        for (String s : tagList) {
-        	Moodtag moodtag = postService.findByName(s.trim());
-        	if (moodtag == null) {
-        		moodtag = postService.saveMoodtag(s.trim());
-        	}
-        	postService.saveTagPost(moodtag.getMoodtagId(), postId);
-        }
-        return postService.findPost(postId).get();
-    }
     
     @GetMapping("/post/tag/delete")
     public Post deleteTagPost(@RequestParam("postId") int postId, @RequestParam("tags") String tags) {
@@ -135,6 +122,10 @@ public class PostController {
     	postService.updateStatusByPostId(0, postId);
     	return postService.findPost(postId).get();
     }
-    
 
+    @PutMapping("/post/open") // 거래중 상태로 업데이트
+    public Post updatePostOpen(@RequestParam("postId") int postId) {
+        postService.updateStatusByPostId(1, postId);
+        return postService.findPost(postId).get();
+    }
 }

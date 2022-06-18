@@ -109,7 +109,6 @@ public class AuctionService {
 				auctionCom.getCategId(),
 				auctionCom.getDesc(),
 				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight()));
-		
 		return auctionRepository.save(auction);
 	}
 	
@@ -150,8 +149,7 @@ public class AuctionService {
 //				auctionCom.getImageUrl(),
 //				new Furniture(auctionCom.getWidth(), auctionCom.getDepth(), auctionCom.getHeight())); 
 //		return auctionRepository.save(auction);
-		return null;
-		
+		return null;		
 	}
 
 	public void deleteAuction(int auctionId) {

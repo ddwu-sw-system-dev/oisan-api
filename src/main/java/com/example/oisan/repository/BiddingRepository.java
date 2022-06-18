@@ -14,6 +14,8 @@ public interface BiddingRepository extends JpaRepository<Bidding, Integer> {
 
 	Bidding findTopByAuctionIdOrderByBiddingIdDesc(int auctionId);
 	
+	List<Bidding> findByAuctionIdOrderByBiddingIdDesc(int auctionId);
+	
 	List<Bidding> findByCustomerId(int customerId);
 
 	@Transactional
