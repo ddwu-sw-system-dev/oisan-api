@@ -52,7 +52,7 @@ public class ChatRoomController {
 	}
 	
 	@GetMapping("/list/{customerId}")
-	public ArrayList<ChatRoom> getCustomerChatRoomListByUsesrId(@PathVariable String customerId) {
+	public ArrayList<ChatRoom> getCustomerChatRoomList(@PathVariable String customerId) {
 		int id = Integer.parseInt(customerId);
 		return chatRoomService.getCustomerChatRoomList(id);
 	}
